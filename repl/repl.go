@@ -3,11 +3,12 @@ package repl
 import (
 	"bufio"
 	"fmt"
-	"github.com/dr8co/monke/evaluator"
-	"github.com/dr8co/monke/lexer"
-	"github.com/dr8co/monke/object"
-	"github.com/dr8co/monke/parser"
 	"io"
+
+	"github.com/dr8co/kong/evaluator"
+	"github.com/dr8co/kong/lexer"
+	"github.com/dr8co/kong/object"
+	"github.com/dr8co/kong/parser"
 )
 
 const PROMPT = ">> "

@@ -2,9 +2,10 @@ package parser
 
 import (
 	"fmt"
-	"github.com/dr8co/monke/ast"
-	"github.com/dr8co/monke/lexer"
 	"testing"
+
+	"github.com/dr8co/kong/ast"
+	"github.com/dr8co/kong/lexer"
 )
 
 func TestLetStatements(t *testing.T) {

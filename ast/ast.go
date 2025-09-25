@@ -2,8 +2,9 @@ package ast
 
 import (
 	"bytes"
-	"github.com/dr8co/monke/token"
 	"strings"
+
+	"github.com/dr8co/kong/token"
 )
 
 type Node interface {

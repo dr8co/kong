@@ -3,9 +3,10 @@ package object
 import (
 	"bytes"
 	"fmt"
-	"github.com/dr8co/monke/ast"
 	"hash/fnv"
 	"strings"
+
+	"github.com/dr8co/kong/ast"
 )
 
 const (

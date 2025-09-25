@@ -1,3 +1,3 @@
-module github.com/dr8co/monke
+module github.com/dr8co/kong
 
-go 1.24
+go 1.25

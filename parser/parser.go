@@ -2,10 +2,11 @@ package parser
 
 import (
 	"fmt"
-	"github.com/dr8co/monke/ast"
-	"github.com/dr8co/monke/lexer"
-	"github.com/dr8co/monke/token"
 	"strconv"
+
+	"github.com/dr8co/kong/ast"
+	"github.com/dr8co/kong/lexer"
+	"github.com/dr8co/kong/token"
 )
 
 const (
