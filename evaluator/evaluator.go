@@ -1,64 +1,18 @@
-// Package evaluator implements the evaluation logic for the Monke programming language.
-//
-// The evaluator takes an Abstract Syntax Tree (AST) produced by the parser and
-// evaluates it to produce values. It implements a tree-walking interpreter that
-// recursively traverses the AST and executes the corresponding operations.
-//
-// Key features:
-//   - Evaluation of all language constructs (expressions, statements, literals, etc.)
-//   - Support for variables and environments
-//   - Function calls and closures
-//   - Error handling and reporting
-//   - Built-in functions
-//   - Optimized for performance with minimal memory allocations
-//   - Object caching for common values (integers, strings, booleans)
-//   - Pre-allocation of collections to reduce reallocations
-//
-// The main entry point is the Eval function, which takes an AST node and an
-// environment and returns an object representing the result of the evaluation.
 package evaluator
 
 import (
 	"fmt"
 
-	"github.com/dr8co/monke/ast"
-	"github.com/dr8co/monke/object"
+	"github.com/dr8co/kong/ast"
+	"github.com/dr8co/kong/object"
 )
 
 var (
-	// TRUE represents the boolean value 'true' within the Monke language and is used in logical evaluations and comparisons.
-	TRUE = &object.Boolean{Value: true}
-
-	// FALSE represents the boolean value 'false' within the Monke language.
+	TRUE  = &object.Boolean{Value: true}
 	FALSE = &object.Boolean{Value: false}
-
-	// NULL represents the singleton null value in the Monke language,
-	// used to denote the absence of a value or a null result.
-	NULL = &object.Null{}
-
-	// Cache for small integer values to reduce allocations
-	// This range covers most common integer values used in programs
-	integerCache = make(map[int64]*object.Integer, 256)
+	NULL  = &object.Null{}
 )
 
-// init initializes the integer cache with values from -128 to 127
-func init() {
-	for i := int64(-128); i <= 127; i++ {
-		integerCache[i] = &object.Integer{Value: i}
-	}
-}
-
-// Eval evaluates the given AST node in the given environment and returns the result.
-// This is the main entry point for the evaluator and handles all types of AST nodes.
-// It recursively evaluates expressions and statements, maintaining the environment
-// for variable lookups and assignments.
-//
-// For expressions, it returns the resulting value.
-// For statements, it either returns a value (for expression and return statements)
-// or nil (for let statements).
-// If an error occurs during evaluation, it returns an Error object.
-//
-//nolint:gocyclo
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	switch node := node.(type) {
 	// Statements
@@ -87,17 +41,13 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// Expressions
 	case *ast.IntegerLiteral:
-		// Use cached integer if available
-		if val, ok := integerCache[node.Value]; ok {
-			return val
-		}
 		return &object.Integer{Value: node.Value}
 
 	case *ast.Boolean:
 		return nativeBoolToBooleanObject(node.Value)
 
 	case *ast.StringLiteral:
-		return getStringObject(node.Value)
+		return &object.String{Value: node.Value}
 
 	case *ast.PrefixExpression:
 		right := Eval(node.Right, env)
@@ -163,6 +113,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.HashLiteral:
 		return evalHashLiteral(node, env)
+
 	}
 
 	return nil
@@ -219,8 +170,7 @@ func evalHashIndexExpression(hash, index object.Object) object.Object {
 }
 
 func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Object {
-	// Pre-allocate the result slice to avoid reallocations
-	result := make([]object.Object, 0, len(exps))
+	var result []object.Object
 
 	for _, e := range exps {
 		evaluated := Eval(e, env)
@@ -273,6 +223,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	}
 
 	return newError("identifier not found: %s", node.Value)
+
 }
 
 func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.Object {
@@ -295,14 +246,13 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	condition := Eval(ie.Condition, env)
 	if isError(condition) {
 		return condition
-	}
-	if isTruthy(condition) {
+	} else if isTruthy(condition) {
 		return Eval(ie.Consequence, env)
-	}
-	if ie.Alternative != nil {
+	} else if ie.Alternative != nil {
 		return Eval(ie.Alternative, env)
+	} else {
+		return NULL
 	}
-	return NULL
 }
 
 func isTruthy(obj object.Object) bool {
@@ -337,27 +287,19 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 	}
 }
 
-// getIntegerObject returns an integer object from the cache if available, or creates a new one
-func getIntegerObject(value int64) *object.Integer {
-	if val, ok := integerCache[value]; ok {
-		return val
-	}
-	return &object.Integer{Value: value}
-}
-
 func evalIntegerInfixExpression(operator string, left, right object.Object) object.Object {
 	leftVal := left.(*object.Integer).Value
 	rightVal := right.(*object.Integer).Value
 
 	switch operator {
 	case "+":
-		return getIntegerObject(leftVal + rightVal)
+		return &object.Integer{Value: leftVal + rightVal}
 	case "-":
-		return getIntegerObject(leftVal - rightVal)
+		return &object.Integer{Value: leftVal - rightVal}
 	case "*":
-		return getIntegerObject(leftVal * rightVal)
+		return &object.Integer{Value: leftVal * rightVal}
 	case "/":
-		return getIntegerObject(leftVal / rightVal)
+		return &object.Integer{Value: leftVal / rightVal}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case ">":
@@ -388,7 +330,7 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 		return newError("unknown operator: -%s", right.Type())
 	}
 	value := right.(*object.Integer).Value
-	return getIntegerObject(-value)
+	return &object.Integer{Value: -value}
 }
 
 func evalBangOperatorExpression(right object.Object) object.Object {
@@ -427,25 +369,6 @@ func nativeBoolToBooleanObject(b bool) *object.Boolean {
 	return FALSE
 }
 
-// stringCache is a map to cache frequently used strings
-var stringCache = make(map[string]*object.String, 100)
-
-// getStringObject returns a string object from the cache if available, or creates a new one
-func getStringObject(value string) *object.String {
-	if val, ok := stringCache[value]; ok {
-		return val
-	}
-
-	// Only cache strings up to a certain length to avoid memory bloat
-	if len(value) <= 64 {
-		str := &object.String{Value: value}
-		stringCache[value] = str
-		return str
-	}
-
-	return &object.String{Value: value}
-}
-
 func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
 	if operator != "+" {
 		return newError("unknown operator: %s %s %s",
@@ -454,12 +377,11 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 	leftVal := left.(*object.String).Value
 	rightVal := right.(*object.String).Value
 
-	return getStringObject(leftVal + rightVal)
+	return &object.String{Value: leftVal + rightVal}
 }
 
 func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Object {
-	// Pre-allocate the map with the expected size to avoid resizing
-	pairs := make(map[object.HashKey]object.HashPair, len(node.Pairs))
+	pairs := make(map[object.HashKey]object.HashPair)
 
 	for keyNode, valueNode := range node.Pairs {
 		key := Eval(keyNode, env)

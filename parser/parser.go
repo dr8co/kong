@@ -1,58 +1,27 @@
-// Package parser implements the syntactic analyzer for the Monke programming language.
-//
-// The parser takes a stream of tokens from the lexer and constructs an Abstract
-// Syntax Tree (AST) that represents the structure of the program. It implements
-// a recursive descent parser with Pratt parsing (precedence climbing) for expressions.
-//
-// Key features:
-//   - Top-down parsing of statements and expressions
-//   - Precedence-based expression parsing
-//   - Error reporting for syntax errors
-//   - Support for all language constructs (statements, expressions, literals, etc.)
-//
-// The main entry point is the New function, which creates a new Parser instance,
-// and the ParseProgram method, which parses a complete Monke program and returns
-// an AST.
 package parser
 
 import (
 	"fmt"
 	"strconv"
 
-	"github.com/dr8co/monke/ast"
-	"github.com/dr8co/monke/lexer"
-	"github.com/dr8co/monke/token"
+	"github.com/dr8co/kong/ast"
+	"github.com/dr8co/kong/lexer"
+	"github.com/dr8co/kong/token"
 )
 
 const (
 	_ int = iota
-
-	// LOWEST represents the lowest possible precedence for parsing expressions in the syntax tree.
 	LOWEST
-
-	// EQUALS is the precedence for the equality operator.
-	EQUALS // ==
-
-	// LESSGREATER is the precedence for the less-than and greater-than operators.
+	EQUALS      // ==
 	LESSGREATER // > or <
-
-	// SUM is the precedence for the sum operator.
-	SUM // +
-
-	// PRODUCT is the precedence for the product operator.
-	PRODUCT // *
-
-	// PREFIX is the precedence for prefix operators.
-	PREFIX // -x or !x
-
-	// CALL is the precedence for function calls.
-	CALL // myFunc(x)
-
-	// INDEX is the precedence for array indexing.
-	INDEX // array[index]
+	SUM         // +
+	PRODUCT     // *
+	PREFIX      // -x or !x
+	CALL        // myFunc(x)
+	INDEX       // array[index]
 )
 
-var precedences = map[token.Type]int{
+var precedences = map[token.TokenType]int{
 	token.EQ:       EQUALS,
 	token.NOT_EQ:   EQUALS,
 	token.LT:       LESSGREATER,
@@ -70,7 +39,6 @@ type (
 	infixParseFn  func(ast.Expression) ast.Expression
 )
 
-// Parser represents a Monke parser.
 type Parser struct {
 	l      *lexer.Lexer
 	errors []string
@@ -78,20 +46,17 @@ type Parser struct {
 	currentToken token.Token
 	peekToken    token.Token
 
-	prefixParseFns map[token.Type]prefixParseFn
-	infixParseFns  map[token.Type]infixParseFn
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns  map[token.TokenType]infixParseFn
 }
 
-// New creates a new Parser with the given lexer.
-// It initializes the parser, registers prefix and infix parsing functions,
-// and reads the first two tokens to set up currentToken and peekToken.
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
 		l:      l,
 		errors: []string{},
 	}
 
-	p.prefixParseFns = make(map[token.Type]prefixParseFn)
+	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
@@ -105,7 +70,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
 	p.registerPrefix(token.LBRACE, p.parseHashLiteral)
 
-	p.infixParseFns = make(map[token.Type]infixParseFn)
+	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
 	p.registerInfix(token.MINUS, p.parseInfixExpression)
 	p.registerInfix(token.SLASH, p.parseInfixExpression)
@@ -124,11 +89,10 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
-func (p *Parser) registerPrefix(tokenType token.Type, fn prefixParseFn) {
+func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
 	p.prefixParseFns[tokenType] = fn
 }
-
-func (p *Parser) registerInfix(tokenType token.Type, fn infixParseFn) {
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
 	p.infixParseFns[tokenType] = fn
 }
 
@@ -140,13 +104,11 @@ func (p *Parser) parseBoolean() ast.Expression {
 	return &ast.Boolean{Token: p.currentToken, Value: p.currentTokenIs(token.TRUE)}
 }
 
-// Errors returns the list of errors encountered during parsing.
-// If the list is empty, parsing was successful.
 func (p *Parser) Errors() []string {
 	return p.errors
 }
 
-func (p *Parser) peekError(t token.Type) {
+func (p *Parser) peekError(t token.TokenType) {
 	msg := fmt.Sprintf("Expected next token to be %s, got %s instead",
 		t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
@@ -167,22 +129,18 @@ func (p *Parser) curPrecedence() int {
 
 	return LOWEST
 }
-
 func (p *Parser) nextToken() {
 	p.currentToken = p.peekToken
 	p.peekToken = p.l.NextToken()
 }
 
-// ParseProgram parses a complete Monke program and returns its AST representation.
-// It processes tokens until it reaches the end of the input, building a list of statements.
-// Check Errors() after calling this method to see if any parsing errors occurred.
 func (p *Parser) ParseProgram() *ast.Program {
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
 
 	for !p.currentTokenIs(token.EOF) {
-		//nolint:staticcheck
-		if stmt := p.parseStatement(); stmt != nil {
+		stmt := p.parseStatement()
+		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
 		}
 		p.nextToken()
@@ -191,7 +149,6 @@ func (p *Parser) ParseProgram() *ast.Program {
 	return program
 }
 
-//nolint:staticcheck
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.currentToken.Type {
 	case token.LET:
@@ -223,20 +180,21 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	return stmt
 }
 
-func (p *Parser) expectPeek(t token.Type) bool {
+func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
 		return true
+	} else {
+		p.peekError(t)
+		return false
 	}
-	p.peekError(t)
-	return false
 }
 
-func (p *Parser) currentTokenIs(t token.Type) bool {
+func (p *Parser) currentTokenIs(t token.TokenType) bool {
 	return p.currentToken.Type == t
 }
 
-func (p *Parser) peekTokenIs(t token.Type) bool {
+func (p *Parser) peekTokenIs(t token.TokenType) bool {
 	return p.peekToken.Type == t
 }
 
@@ -306,7 +264,7 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 	return expression
 }
 
-func (p *Parser) noPrefixParseFnError(t token.Type) {
+func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 	msg := fmt.Sprintf("no prefix parse function for %s found", t)
 	p.errors = append(p.errors, msg)
 }
@@ -373,8 +331,8 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	p.nextToken()
 
 	for !p.currentTokenIs(token.RBRACE) && !p.currentTokenIs(token.EOF) {
-		//nolint:staticcheck
-		if stmt := p.parseStatement(); stmt != nil {
+		stmt := p.parseStatement()
+		if stmt != nil {
 			block.Statements = append(block.Statements, stmt)
 		}
 		p.nextToken()
@@ -441,7 +399,7 @@ func (p *Parser) parseArrayLiteral() ast.Expression {
 	return array
 }
 
-func (p *Parser) parseExpressionList(end token.Type) []ast.Expression {
+func (p *Parser) parseExpressionList(end token.TokenType) []ast.Expression {
 	var list []ast.Expression
 
 	if p.peekTokenIs(end) {

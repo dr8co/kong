@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/dr8co/monke/token"
+	"github.com/dr8co/kong/token"
 )
 
 func TestNextToken(t *testing.T) {
@@ -31,7 +31,7 @@ if (5 < 10) {
 {"foo": "bar"}
 `
 	tests := []struct {
-		expectedType    token.Type
+		expectedType    token.TokenType
 		expectedLiteral string
 	}{
 		{token.LET, "let"},

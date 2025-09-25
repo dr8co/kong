@@ -16,7 +16,7 @@
 // and the NextToken method, which returns the next token from the input.
 package lexer
 
-import "github.com/dr8co/monke/token"
+import "github.com/dr8co/kong/token"
 
 // Common tokens that are reused to reduce allocations
 var (
