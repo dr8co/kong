@@ -18,7 +18,7 @@ func Start(in io.Reader, out io.Writer) {
 	env := object.NewEnvironment()
 
 	for {
-		_, err := fmt.Fprintf(out, PROMPT)
+		_, err := fmt.Fprint(out, PROMPT)
 		if err != nil {
 			panic(err)
 		}
