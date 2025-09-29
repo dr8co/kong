@@ -57,9 +57,9 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		stackTop := machine.StackTop()
+		lastPopped := machine.LastPoppedStackItem()
 
-		_, err = io.WriteString(out, stackTop.Inspect()+"\n")
+		_, err = io.WriteString(out, lastPopped.Inspect()+"\n")
 		if err != nil {
 			panic(err)
 		}
