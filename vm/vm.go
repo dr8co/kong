@@ -37,6 +37,16 @@ func New(bytecode *compiler.Bytecode) *VM {
 	}
 }
 
+func NewWithGlobalsStore(bytecode *compiler.Bytecode, s []object.Object) *VM {
+	return &VM{
+		instructions: bytecode.Instructions,
+		constants:    bytecode.Constants,
+		stack:        make([]object.Object, StackSize),
+		sp:           0,
+		globals:      s,
+	}
+}
+
 func (vm *VM) LastPoppedStackItem() object.Object {
 	return vm.stack[vm.sp]
 }
