@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/dr8co/kong/code"
@@ -191,6 +192,24 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
+
+		case code.OpReturnValue:
+			returnValue := vm.pop()
+			vm.popFrame()
+			vm.pop()
+
+			err := vm.push(returnValue)
+			if err != nil {
+				return err
+			}
+
+		case code.OpCall:
+			fn, ok := vm.stack[vm.sp-1].(*object.CompiledFunction)
+			if !ok {
+				return errors.New("calling non-function")
+			}
+			frame := NewFrame(fn)
+			vm.pushFrame(frame)
 		}
 	}
 	return nil
