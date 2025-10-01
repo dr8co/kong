@@ -1,9 +1,9 @@
 // Package lexer implements the lexical analyzer for the Monke programming language.
 //
 // The lexer is responsible for breaking down the source code into tokens,
-// which are the smallest units of meaning in the language. It reads the input
-// character by character and produces a stream of tokens that can be processed
-// by the parser.
+// which are the smallest units of meaning in the language.
+// It reads the input character by character and produces a stream of tokens
+// that can be processed by the parser.
 //
 // Key features:
 //   - Tokenization of all language elements (keywords, identifiers, literals, operators, etc.)
