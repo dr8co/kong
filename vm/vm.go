@@ -59,6 +59,7 @@
 package vm
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/dr8co/kong/code"
@@ -152,7 +153,10 @@ func (vm *VM) LastPoppedStackItem() object.Object {
 	return vm.stack[vm.sp]
 }
 
-// Run executes the instructions of the virtual machine, managing the program counter and stack during execution.
+// Run executes the instructions of the virtual machine,
+// managing the program counter and stack during execution.
+//
+//nolint:gocyclo
 func (vm *VM) Run() error {
 	var ip int
 	var ins code.Instructions
@@ -264,7 +268,7 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
-			vm.sp = vm.sp - numElements
+			vm.sp -= numElements
 
 			err = vm.push(hash)
 			if err != nil {
@@ -301,7 +305,7 @@ func (vm *VM) Run() error {
 
 		case code.OpCall:
 			numArgs := int(code.ReadUint8(ins[ip+1:]))
-			vm.currentFrame().ip += 1
+			vm.currentFrame().ip++
 
 			err := vm.executeCall(numArgs)
 			if err != nil {
@@ -310,13 +314,13 @@ func (vm *VM) Run() error {
 
 		case code.OpSetLocal:
 			localIndex := code.ReadUint8(ins[ip+1:])
-			vm.currentFrame().ip += 1
+			vm.currentFrame().ip++
 			frame := vm.currentFrame()
 			vm.stack[frame.basePointer+int(localIndex)] = vm.pop()
 
 		case code.OpGetLocal:
 			localIndex := code.ReadUint8(ins[ip+1:])
-			vm.currentFrame().ip += 1
+			vm.currentFrame().ip++
 			frame := vm.currentFrame()
 
 			err := vm.push(vm.stack[frame.basePointer+int(localIndex)])
@@ -326,7 +330,7 @@ func (vm *VM) Run() error {
 
 		case code.OpGetBuiltin:
 			builtinIndex := code.ReadUint8(ins[ip+1:])
-			vm.currentFrame().ip += 1
+			vm.currentFrame().ip++
 
 			definition := object.Builtins[builtinIndex]
 			err := vm.push(definition.Builtin)
@@ -346,7 +350,7 @@ func (vm *VM) Run() error {
 
 		case code.OpGetFree:
 			freeIndex := int(code.ReadUint8(ins[ip+1:]))
-			vm.currentFrame().ip += 1
+			vm.currentFrame().ip++
 			currentClosure := vm.currentFrame().cl
 
 			err := vm.push(currentClosure.Free[freeIndex])
@@ -383,7 +387,7 @@ func isTruthy(obj object.Object) bool {
 // Returns an error on overflow.
 func (vm *VM) push(obj object.Object) error {
 	if vm.sp >= StackSize {
-		return fmt.Errorf("stack overflow")
+		return errors.New("stack overflow")
 	}
 	vm.stack[vm.sp] = obj
 	vm.sp++
@@ -651,7 +655,7 @@ func (vm *VM) executeCall(numArgs int) error {
 	case *object.Builtin:
 		return vm.callBuiltin(callee, numArgs)
 	default:
-		return fmt.Errorf("calling non-function and non-built-in")
+		return errors.New("calling non-function and non-built-in")
 	}
 }
 
@@ -680,10 +684,11 @@ func (vm *VM) pushClosure(constIndex, numFree int) error {
 		return fmt.Errorf("not a function: %+v", constObj)
 	}
 	free := make([]object.Object, numFree)
-	for i := 0; i < numFree; i++ {
+
+	for i := range numFree {
 		free[i] = vm.stack[vm.sp-numFree+i]
 	}
-	vm.sp = vm.sp - numFree
+	vm.sp -= numFree
 
 	closure := &object.Closure{Fn: function, Free: free}
 	return vm.push(closure)

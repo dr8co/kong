@@ -366,7 +366,7 @@ func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
 func (fl *FunctionLiteral) String() string {
 	var out strings.Builder
 
-	var params []string
+	params := make([]string, 0, len(fl.Parameters))
 	for _, p := range fl.Parameters {
 		params = append(params, p.String())
 	}

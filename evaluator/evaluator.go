@@ -57,8 +57,6 @@ func init() {
 // For statements, it either returns a value (for expression and return statements)
 // or nil (for let statements).
 // If an error occurs during evaluation, it returns an Error object.
-//
-//nolint:gocyclo
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	switch node := node.(type) {
 	// Statements
