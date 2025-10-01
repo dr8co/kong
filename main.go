@@ -8,11 +8,11 @@ import (
 	"os/user"
 	"path/filepath"
 
-	"github.com/dr8co/kong/evaluator"
+	"github.com/dr8co/kong/compiler"
 	"github.com/dr8co/kong/lexer"
-	"github.com/dr8co/kong/object"
 	"github.com/dr8co/kong/parser"
 	"github.com/dr8co/kong/repl"
+	"github.com/dr8co/kong/vm"
 )
 
 const version = "0.1.0"
@@ -121,10 +121,7 @@ func executeFile(filename string, debug bool) {
 		os.Exit(1)
 	}
 
-	// Create environment
-	env := object.NewEnvironment()
-
-	// Parse and evaluate the file
+	// Parse the file
 	l := lexer.New(string(content))
 	p := parser.New(l)
 	program := p.ParseProgram()
@@ -134,20 +131,34 @@ func executeFile(filename string, debug bool) {
 		os.Exit(1)
 	}
 
-	evaluated := evaluator.Eval(program, env)
+	// Compile the program
+	comp := compiler.New()
+	err = comp.Compile(program)
+	if err != nil {
+		fmt.Printf("Compilation error: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Run the bytecode in the VM
+	machine := vm.New(comp.Bytecode())
+	err = machine.Run()
+	if err != nil {
+		fmt.Printf("VM error: %s\n", err)
+		os.Exit(1)
+	}
 
 	// Print the result if in debug mode
-	if debug && evaluated != nil {
-		fmt.Println(evaluated.Inspect())
+	if debug {
+		stackTop := machine.LastPoppedStackItem()
+		if stackTop != nil {
+			fmt.Println(stackTop.Inspect())
+		}
 	}
 }
 
 // evaluateExpression evaluates a single Monkey expression
 func evaluateExpression(expr string) {
-	// Create environment
-	env := object.NewEnvironment()
-
-	// Parse and evaluate the expression
+	// Parse the expression
 	l := lexer.New(expr)
 	p := parser.New(l)
 	program := p.ParseProgram()
@@ -157,24 +168,33 @@ func evaluateExpression(expr string) {
 		os.Exit(1)
 	}
 
-	evaluated := evaluator.Eval(program, env)
+	// Compile the program
+	comp := compiler.New()
+	err := comp.Compile(program)
+	if err != nil {
+		fmt.Printf("Compilation error: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Run the bytecode in the VM
+	machine := vm.New(comp.Bytecode())
+	err = machine.Run()
+	if err != nil {
+		fmt.Printf("VM error: %s\n", err)
+		os.Exit(1)
+	}
 
 	// Print the result
-	if evaluated != nil {
-		fmt.Println(evaluated.Inspect())
+	stackTop := machine.LastPoppedStackItem()
+	if stackTop != nil {
+		fmt.Println(stackTop.Inspect())
 	}
 }
 
 // printParserErrors prints parser errors to stderr
 func printParserErrors(errors []string) {
-	_, err := fmt.Fprintln(os.Stderr, "Parser errors:")
-	if err != nil {
-		panic(err)
-	}
+	_, _ = fmt.Fprintln(os.Stderr, "Parser errors:")
 	for _, msg := range errors {
-		_, err := fmt.Fprintln(os.Stderr, "\t"+msg)
-		if err != nil {
-			panic(err)
-		}
+		_, _ = fmt.Fprintln(os.Stderr, "\t"+msg)
 	}
 }
