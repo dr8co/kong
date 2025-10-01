@@ -2,6 +2,7 @@ package code
 
 import "testing"
 
+// TestMake tests the [Make] function.
 func TestMake(t *testing.T) {
 	tests := []struct {
 		op       Opcode
@@ -28,6 +29,7 @@ func TestMake(t *testing.T) {
 	}
 }
 
+// TestInstructionsString tests the [Instructions.String] function.
 func TestInstructionsString(t *testing.T) {
 	instructions := []Instructions{
 		Make(OpAdd),
@@ -53,6 +55,7 @@ func TestInstructionsString(t *testing.T) {
 	}
 }
 
+// TestReadOperands tests the [ReadOperands] function.
 func TestReadOperands(t *testing.T) {
 	tests := []struct {
 		op        Opcode
