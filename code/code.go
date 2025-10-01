@@ -259,6 +259,7 @@ func Make(op Opcode, operands ...int) []byte {
 		case 1:
 			instruction[offset] = byte(operand)
 		case 2:
+			//nolint:gosec
 			binary.BigEndian.PutUint16(instruction[offset:], uint16(operand))
 		}
 		offset += width

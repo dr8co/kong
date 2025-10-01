@@ -123,11 +123,12 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
-func (p *Parser) registerPrefix(Type token.Type, fn prefixParseFn) {
-	p.prefixParseFns[Type] = fn
+func (p *Parser) registerPrefix(t token.Type, fn prefixParseFn) {
+	p.prefixParseFns[t] = fn
 }
-func (p *Parser) registerInfix(Type token.Type, fn infixParseFn) {
-	p.infixParseFns[Type] = fn
+
+func (p *Parser) registerInfix(t token.Type, fn infixParseFn) {
+	p.infixParseFns[t] = fn
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
@@ -164,6 +165,7 @@ func (p *Parser) curPrecedence() int {
 
 	return LOWEST
 }
+
 func (p *Parser) nextToken() {
 	p.currentToken = p.peekToken
 	p.peekToken = p.l.NextToken()
@@ -228,10 +230,9 @@ func (p *Parser) expectPeek(t token.Type) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
 		return true
-	} else {
-		p.peekError(t)
-		return false
 	}
+	p.peekError(t)
+	return false
 }
 
 func (p *Parser) currentTokenIs(t token.Type) bool {

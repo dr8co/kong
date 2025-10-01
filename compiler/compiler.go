@@ -61,7 +61,6 @@ type Compiler struct {
 
 // Bytecode represents the compiled instructions and constants for a program or function.
 type Bytecode struct {
-
 	// Holds the compiled bytecode instructions for a program or function.
 	Instructions code.Instructions
 
@@ -71,7 +70,6 @@ type Bytecode struct {
 
 // EmittedInstruction represents a bytecode instruction that has been emitted during compilation.
 type EmittedInstruction struct {
-
 	// Opcode represents the specific operation code of the emitted bytecode instruction.
 	Opcode code.Opcode
 
@@ -81,7 +79,6 @@ type EmittedInstruction struct {
 
 // CompilationScope represents a single layer of compilation containing instructions and metadata about recently emitted instructions.
 type CompilationScope struct {
-
 	// Represents the sequence of bytecode instructions for the current compilation scope.
 	instructions code.Instructions
 
@@ -127,6 +124,8 @@ func NewWithState(s *SymbolTable, constants []object.Object) *Compiler {
 }
 
 // Compile traverses the given AST node and translates it into bytecode instructions for interpretation.
+//
+//nolint:gocyclo
 func (c *Compiler) Compile(node ast.Node) error {
 	switch node := node.(type) {
 	case *ast.Program:
@@ -446,7 +445,7 @@ func (c *Compiler) removeLastPop() {
 func (c *Compiler) replaceInstruction(pos int, newInstruction []byte) {
 	ins := c.currentInstructions()
 
-	for i := 0; i < len(newInstruction); i++ {
+	for i := range newInstruction {
 		ins[pos+i] = newInstruction[i]
 	}
 }
