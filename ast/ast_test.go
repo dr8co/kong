@@ -6,6 +6,7 @@ import (
 	"github.com/dr8co/kong/token"
 )
 
+// TestString tests the String method of the Program node.
 func TestString(t *testing.T) {
 	program := &Program{
 		Statements: []Statement{
