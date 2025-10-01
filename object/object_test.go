@@ -2,6 +2,7 @@ package object
 
 import "testing"
 
+// TestStringHashKey verifies the correctness of hash key generation for String objects with identical and different values.
 func TestStringHashKey(t *testing.T) {
 	hello1 := &String{Value: "Hello World"}
 	hello2 := &String{Value: "Hello World"}

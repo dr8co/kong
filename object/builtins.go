@@ -2,8 +2,12 @@ package object
 
 import "fmt"
 
+// Builtins is a collection of predefined built-in functions available for use within the language.
 var Builtins = []struct {
-	Name    string
+	// The name of the built-in function.
+	Name string
+
+	// The definition (and implementation) of the built-in function.
 	Builtin *Builtin
 }{
 	{
@@ -122,6 +126,9 @@ func newError(format string, a ...any) *Error {
 	return &Error{Message: fmt.Sprintf(format, a...)}
 }
 
+// GetBuiltinByName retrieves a built-in function definition by its name from the predefined [Builtins] collection.
+//
+// It returns a pointer to the corresponding [Builtin] or nil if the name is not found.
 func GetBuiltinByName(name string) *Builtin {
 	for _, def := range Builtins {
 		if def.Name == name {
