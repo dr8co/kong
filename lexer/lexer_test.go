@@ -6,6 +6,7 @@ import (
 	"github.com/dr8co/kong/token"
 )
 
+// TestNextToken tests the functionality of the NextToken method in the Lexer to ensure all tokens are correctly identified.
 func TestNextToken(t *testing.T) {
 	input := `let five = 5;
 let ten = 10;
