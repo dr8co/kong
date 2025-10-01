@@ -8,6 +8,7 @@ import (
 	"github.com/dr8co/kong/parser"
 )
 
+// TestEvalIntegerExpression verifies the evaluation of integer expressions against expected results.
 func TestEvalIntegerExpression(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -36,6 +37,7 @@ func TestEvalIntegerExpression(t *testing.T) {
 	}
 }
 
+// TestEvalBooleanExpression tests the evaluation of boolean expressions within the interpreter for correctness.
 func TestEvalBooleanExpression(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -68,6 +70,7 @@ func TestEvalBooleanExpression(t *testing.T) {
 	}
 }
 
+// TestBangOperator evaluates the correctness of the bang (!) operator in different logical and Boolean scenarios.
 func TestBangOperator(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -87,6 +90,7 @@ func TestBangOperator(t *testing.T) {
 	}
 }
 
+// TestIfElseExpressions evaluates the correctness of the if-else expression in different logical and Boolean scenarios.
 func TestIfElseExpressions(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -112,6 +116,7 @@ func TestIfElseExpressions(t *testing.T) {
 	}
 }
 
+// TestReturnStatements tests the evaluation of return statement expressions in various input scenarios.
 func TestReturnStatements(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -159,6 +164,7 @@ func TestReturnStatements(t *testing.T) {
 	}
 }
 
+// TestErrorHandling validates the error handling in the evaluator by testing different inputs and comparing error messages.
 func TestErrorHandling(t *testing.T) {
 	tests := []struct {
 		input           string
@@ -235,6 +241,7 @@ func TestErrorHandling(t *testing.T) {
 	}
 }
 
+// TestLetStatements tests the evaluation of "let" statements in the interpreter to ensure they produce correct integer values.
 func TestLetStatements(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -251,6 +258,8 @@ func TestLetStatements(t *testing.T) {
 	}
 }
 
+// TestFunctionObject validates the correct parsing and evaluation of a function object from the input string.
+// It checks the function's parameters, body, and type to ensure they match the expected values.
 func TestFunctionObject(t *testing.T) {
 	input := "fn(x) { x + 2; };"
 	evaluated := testEval(input)
@@ -275,6 +284,7 @@ func TestFunctionObject(t *testing.T) {
 	}
 }
 
+// TestFunctionApplication tests the evaluation of function applications and ensures they return expected integer results.
 func TestFunctionApplication(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -293,6 +303,8 @@ func TestFunctionApplication(t *testing.T) {
 	}
 }
 
+// TestClosures tests nested function closures and evaluates their behavior with captured variables.
+// Ensures the resulting function preserves the outer function's context and computes the correct value.
 func TestClosures(t *testing.T) {
 	input := `
     let newAdder = fn(x) {
@@ -305,6 +317,7 @@ func TestClosures(t *testing.T) {
 	testIntegerObject(t, testEval(input), 4)
 }
 
+// TestEnclosingEnvironments tests scope resolution and enclosing environments in function execution and evaluation.
 func TestEnclosingEnvironments(t *testing.T) {
 	input := `
     let first = 10;
@@ -322,6 +335,7 @@ func TestEnclosingEnvironments(t *testing.T) {
 	testIntegerObject(t, testEval(input), 70)
 }
 
+// TestStringLiteral verifies that a string literal is parsed, evaluated, and converted properly into an object.String.
 func TestStringLiteral(t *testing.T) {
 	input := `"Hello World!"`
 
@@ -336,6 +350,8 @@ func TestStringLiteral(t *testing.T) {
 	}
 }
 
+// TestStringConcatenation tests the evaluation of string concatenation expressions to ensure correctness of the result.
+// It verifies that the evaluated object is of type String and that its value matches the expected concatenated string.
 func TestStringConcatenation(t *testing.T) {
 	input := `"Hello" + " " + "World!"`
 
@@ -350,6 +366,7 @@ func TestStringConcatenation(t *testing.T) {
 	}
 }
 
+// TestBuiltinFunctions validates the behavior of various built-in functions using a series of test cases.
 func TestBuiltinFunctions(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -413,6 +430,7 @@ func TestBuiltinFunctions(t *testing.T) {
 	}
 }
 
+// TestArrayLiterals validates the evaluation of array literals and ensures correct parsing of elements and their values.
 func TestArrayLiterals(t *testing.T) {
 	input := `[1, 2 * 2, 3 + 3]`
 
@@ -431,6 +449,7 @@ func TestArrayLiterals(t *testing.T) {
 	testIntegerObject(t, arr.Elements[2], 6)
 }
 
+// TestArrayIndexExpressions tests the evaluation of array index expressions for various cases and verifies the expected results.
 func TestArrayIndexExpressions(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -489,6 +508,7 @@ func TestArrayIndexExpressions(t *testing.T) {
 	}
 }
 
+// TestHashLiterals tests the evaluation of hash literals and validates that keys and values are correctly parsed and stored.
 func TestHashLiterals(t *testing.T) {
 	input := `let two = "two";
     {
@@ -527,6 +547,7 @@ func TestHashLiterals(t *testing.T) {
 	}
 }
 
+// TestHashIndexExpressions tests the evaluation of hash index expressions against expected results.
 func TestHashIndexExpressions(t *testing.T) {
 	tests := []struct {
 		input    string
