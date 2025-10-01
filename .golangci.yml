@@ -1,4 +1,3 @@
-# Recommended golangci-lint configuration for Go projects
 # See https://golangci-lint.run/usage/configuration/ for more options
 version: "2"
 
