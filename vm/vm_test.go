@@ -28,6 +28,7 @@ func testIntegerObject(expected int64, actual object.Object) error {
 	return nil
 }
 
+// vmTestCase represents a single test case for the virtual machine, including input code and the expected output.
 type vmTestCase struct {
 	input    string
 	expected interface{}
@@ -159,6 +160,7 @@ func testBooleanObject(expected bool, actual object.Object) error {
 	return nil
 }
 
+// TestIntegerArithmetic validates the correct execution of integer arithmetic operations in the virtual machine.
 func TestIntegerArithmetic(t *testing.T) {
 	tests := []vmTestCase{
 		{"1", 1},
@@ -181,6 +183,7 @@ func TestIntegerArithmetic(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestBooleanExpressions verifies the evaluation of various boolean expressions in the virtual machine using test cases.
 func TestBooleanExpressions(t *testing.T) {
 	tests := []vmTestCase{
 		{"true", true},
@@ -214,6 +217,7 @@ func TestBooleanExpressions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestConditionals verifies the evaluation of conditional expressions within the virtual machine.
 func TestConditionals(t *testing.T) {
 	tests := []vmTestCase{
 		{"if (true) { 10 }", 10},
@@ -229,6 +233,7 @@ func TestConditionals(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestGlobalLetStatements verifies the evaluation of `let` statements in a global scope using the virtual machine.
 func TestGlobalLetStatements(t *testing.T) {
 	tests := []vmTestCase{
 		{"let one = 1; one", 1},
@@ -238,6 +243,7 @@ func TestGlobalLetStatements(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestStringExpressions tests the evaluation of string-related expressions in the virtual machine.
 func TestStringExpressions(t *testing.T) {
 	tests := []vmTestCase{
 		{`"monkey"`, "monkey"},
@@ -247,6 +253,7 @@ func TestStringExpressions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestArrayLiterals tests the compilation and execution of array literals in the virtual machine.
 func TestArrayLiterals(t *testing.T) {
 	tests := []vmTestCase{
 		{"[]", []int{}},
@@ -256,6 +263,7 @@ func TestArrayLiterals(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestHashLiterals tests the evaluation of hash literals and ensures their keys and values are compiled and executed correctly.
 func TestHashLiterals(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -279,6 +287,7 @@ func TestHashLiterals(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestIndexExpressions tests the evaluation of index expressions on arrays and hashes in the virtual machine.
 func TestIndexExpressions(t *testing.T) {
 	tests := []vmTestCase{
 		{"[1, 2, 3][1]", 2},
@@ -295,6 +304,7 @@ func TestIndexExpressions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestCallingFunctionsWithoutArguments tests the execution of functions without arguments and ensures the expected output is returned.
 func TestCallingFunctionsWithoutArguments(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -325,6 +335,7 @@ func TestCallingFunctionsWithoutArguments(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestFunctionsWithReturnStatement tests the behavior of functions with early return statements in a virtual machine.
 func TestFunctionsWithReturnStatement(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -345,6 +356,7 @@ func TestFunctionsWithReturnStatement(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestFunctionsWithoutReturnValue verifies the behavior of functions in a virtual machine that do not explicitly return a value.
 func TestFunctionsWithoutReturnValue(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -367,6 +379,7 @@ func TestFunctionsWithoutReturnValue(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestFirstClassFunctions verifies the behavior of first-class functions by evaluating code snippets and comparing outputs.
 func TestFirstClassFunctions(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -391,6 +404,7 @@ func TestFirstClassFunctions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestCallingFunctionsWithBindings tests the execution of functions utilizing local bindings and variables in various scenarios.
 func TestCallingFunctionsWithBindings(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -442,6 +456,7 @@ func TestCallingFunctionsWithBindings(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestCallingFunctionsWithArgumentsAndBindings verifies the VM's ability to execute functions with arguments and closures properly.
 func TestCallingFunctionsWithArgumentsAndBindings(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -511,6 +526,7 @@ func TestCallingFunctionsWithArgumentsAndBindings(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestCallingFunctionsWithWrongArguments tests error handling when functions are called with incorrect argument counts.
 func TestCallingFunctionsWithWrongArguments(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -547,6 +563,7 @@ func TestCallingFunctionsWithWrongArguments(t *testing.T) {
 	}
 }
 
+// TestBuiltinFunctions tests the functionality and error handling of built-in functions in the virtual machine.
 func TestBuiltinFunctions(t *testing.T) {
 	tests := []vmTestCase{
 		{`len("")`, 0},
@@ -592,6 +609,7 @@ func TestBuiltinFunctions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestClosures verifies the functionality of closures and nested functions in the virtual machine.
 func TestClosures(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -670,6 +688,7 @@ func TestClosures(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestRecursiveFunctions tests the VM's ability to correctly evaluate recursive function calls and returns expected outcomes.
 func TestRecursiveFunctions(t *testing.T) {
 	tests := []vmTestCase{
 		{
@@ -721,6 +740,7 @@ func TestRecursiveFunctions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+// TestRecursiveFibonacci tests the evaluation of a recursive Fibonacci function executed in the virtual machine.
 func TestRecursiveFibonacci(t *testing.T) {
 	tests := []vmTestCase{
 		{
