@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"bytes"
 	"strings"
 
 	"github.com/dr8co/kong/token"
@@ -35,7 +34,7 @@ func (p *Program) TokenLiteral() string {
 }
 
 func (p *Program) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	for _, s := range p.Statements {
 		out.WriteString(s.String())
@@ -61,7 +60,7 @@ type LetStatement struct {
 func (ls *LetStatement) statementNode()       {}
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 func (ls *LetStatement) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	out.WriteString(ls.TokenLiteral() + " ")
 	out.WriteString(ls.Name.String())
@@ -82,7 +81,7 @@ type ReturnStatement struct {
 func (rs *ReturnStatement) statementNode()       {}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 func (rs *ReturnStatement) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 	out.WriteString(rs.TokenLiteral() + " ")
 
 	if rs.ReturnValue != nil {
@@ -124,7 +123,7 @@ type PrefixExpression struct {
 func (pe *PrefixExpression) expressionNode()      {}
 func (pe *PrefixExpression) TokenLiteral() string { return pe.Token.Literal }
 func (pe *PrefixExpression) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	out.WriteString("(")
 	out.WriteString(pe.Operator)
@@ -144,7 +143,7 @@ type InfixExpression struct {
 func (ie *InfixExpression) expressionNode()      {}
 func (ie *InfixExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *InfixExpression) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	out.WriteString("(")
 	out.WriteString(ie.Left.String())
@@ -174,7 +173,7 @@ type IfExpression struct {
 func (ie *IfExpression) expressionNode()      {}
 func (ie *IfExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *IfExpression) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	out.WriteString("if")
 	out.WriteString(ie.Condition.String())
@@ -196,7 +195,7 @@ type BlockStatement struct {
 func (bs *BlockStatement) statementNode()       {}
 func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
 func (bs *BlockStatement) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	for _, s := range bs.Statements {
 		out.WriteString(s.String())
@@ -214,7 +213,7 @@ type FunctionLiteral struct {
 func (fl *FunctionLiteral) expressionNode()      {}
 func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
 func (fl *FunctionLiteral) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	var params []string
 	for _, p := range fl.Parameters {
@@ -242,7 +241,7 @@ type CallExpression struct {
 func (ce *CallExpression) expressionNode()      {}
 func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
 func (ce *CallExpression) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 	var args []string
 
 	for _, a := range ce.Arguments {
@@ -273,7 +272,7 @@ type ArrayLiteral struct {
 func (al *ArrayLiteral) expressionNode()      {}
 func (al *ArrayLiteral) TokenLiteral() string { return al.Token.Literal }
 func (al *ArrayLiteral) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	var elems []string
 	for _, el := range al.Elements {
@@ -295,7 +294,7 @@ type IndexExpression struct {
 func (ie *IndexExpression) expressionNode()      {}
 func (ie *IndexExpression) TokenLiteral() string { return ie.Token.Literal }
 func (ie *IndexExpression) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	out.WriteString("(")
 	out.WriteString(ie.Left.String())
@@ -314,7 +313,7 @@ type HashLiteral struct {
 func (hl *HashLiteral) expressionNode()      {}
 func (hl *HashLiteral) TokenLiteral() string { return hl.Token.Literal }
 func (hl *HashLiteral) String() string {
-	var out bytes.Buffer
+	var out strings.Builder
 
 	var pairs []string
 	for key, value := range hl.Pairs {
