@@ -1,12 +1,13 @@
 // Package token defines the token types and structures for the Monke programming language.
 //
 // Tokens are the smallest units of meaning in the language, produced by the lexer
-// during the lexical analysis phase. Each token represents a specific language element
-// such as a keyword, identifier, operator, or delimiter.
+// during the lexical analysis phase.
+// Each token represents a specific language element such as a keyword,
+// identifier, operator, or delimiter.
 //
 // Key components:
-//   - TokenType: A type representing different categories of tokens
-//   - Token: A structure containing the type and literal value of a token
+//   - [Type]: A type representing different categories of tokens
+//   - [Token]: A structure containing the type and literal value of a token
 //   - Constants for all token types supported by the language
 //   - Lookup functions for identifying keywords
 //
@@ -19,7 +20,10 @@ type Type string
 
 // Token represents a single token in the source code.
 type Token struct {
-	Type    Type
+	// Type specifies the category of the token, such as keywords, identifiers, or operators.
+	Type Type
+
+	// Literal specifies the exact string value of the token as it appears in the source code.
 	Literal string
 }
 
@@ -67,6 +71,7 @@ const (
 	RETURN   = "RETURN"
 )
 
+// keywords is a map of reserved keywords to their corresponding token types.
 var keywords = map[string]Type{
 	"fn":     FUNCTION,
 	"let":    LET,
@@ -79,7 +84,7 @@ var keywords = map[string]Type{
 
 // LookupIdent checks if the given identifier is a keyword.
 // If it is, it returns the corresponding token type.
-// Otherwise, it returns the IDENT token type.
+// Otherwise, it returns the [IDENT] type.
 func LookupIdent(ident string) Type {
 	if tok, ok := keywords[ident]; ok {
 		return tok
