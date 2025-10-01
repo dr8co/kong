@@ -2,6 +2,7 @@ package compiler
 
 import "testing"
 
+// TestDefine tests [SymbolTable.Define].
 func TestDefine(t *testing.T) {
 	expected := map[string]Symbol{
 		"a": {Name: "a", Scope: GlobalScope, Index: 0},
@@ -46,6 +47,7 @@ func TestDefine(t *testing.T) {
 	}
 }
 
+// TestResolveGlobal verifies that symbols defined in the global scope are resolved correctly with accurate metadata.
 func TestResolveGlobal(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
@@ -69,6 +71,8 @@ func TestResolveGlobal(t *testing.T) {
 	}
 }
 
+// TestResolveLocal tests the resolution of symbols in a local symbol table, including inherited global symbols.
+// It verifies that symbols are correctly identified with their respective scopes and indices.
 func TestResolveLocal(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
@@ -97,6 +101,7 @@ func TestResolveLocal(t *testing.T) {
 	}
 }
 
+// TestResolveNestedLocal tests the resolution of symbols across nested and global symbol tables during lookup operations.
 func TestResolveNestedLocal(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
@@ -147,6 +152,7 @@ func TestResolveNestedLocal(t *testing.T) {
 	}
 }
 
+// TestDefineResolveBuiltins tests defining and resolving built-in symbols across nested symbol tables.
 func TestDefineResolveBuiltins(t *testing.T) {
 	global := NewSymbolTable()
 	firstLocal := NewEnclosedSymbolTable(global)
@@ -177,6 +183,7 @@ func TestDefineResolveBuiltins(t *testing.T) {
 	}
 }
 
+// TestResolveFree verifies the resolution of symbols and free variables in nested symbol tables.
 func TestResolveFree(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
@@ -249,6 +256,8 @@ func TestResolveFree(t *testing.T) {
 	}
 }
 
+// TestResolveUnresolvableFree ensures that symbols are correctly resolved across different scopes,
+// including unresolvable ones.
 func TestResolveUnresolvableFree(t *testing.T) {
 	global := NewSymbolTable()
 	global.Define("a")
@@ -292,6 +301,7 @@ func TestResolveUnresolvableFree(t *testing.T) {
 	}
 }
 
+// TestDefineAndResolveFunctionName tests the ability to define a function name in a symbol table and resolve it correctly.
 func TestDefineAndResolveFunctionName(t *testing.T) {
 	global := NewSymbolTable()
 	global.DefineFunctionName("a")
@@ -306,6 +316,7 @@ func TestDefineAndResolveFunctionName(t *testing.T) {
 	}
 }
 
+// TestShadowingFunctionName verifies that a function name defined in the symbol table can be resolved correctly and without conflict.
 func TestShadowingFunctionName(t *testing.T) {
 	global := NewSymbolTable()
 	global.DefineFunctionName("a")
