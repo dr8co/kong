@@ -11,18 +11,22 @@ import (
 	"github.com/dr8co/kong/parser"
 )
 
+// compilerTestCase represents a single test scenario for the compiler with input source,
+// expected constants, and instructions.
 type compilerTestCase struct {
 	input                string
 	expectedConstants    []interface{}
 	expectedInstructions []code.Instructions
 }
 
+// parse parses the input source and returns the AST.
 func parse(input string) *ast.Program {
 	l := lexer.New(input)
 	p := parser.New(l)
 	return p.ParseProgram()
 }
 
+// TestIntegerArithmetic tests the compilation of various integer arithmetic expressions into bytecode instructions.
 func TestIntegerArithmetic(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -88,6 +92,7 @@ func TestIntegerArithmetic(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestBooleanExpressions tests the compilation of boolean expressions and comparisons into expected bytecode instructions.
 func TestBooleanExpressions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -180,6 +185,7 @@ func TestBooleanExpressions(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestConditionals tests the compilation process for conditional statements including if, else, and constant values.
 func TestConditionals(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -234,6 +240,8 @@ if (true) { 10 } else { 20 }; 3333;
 	runCompilerTests(t, tests)
 }
 
+// TestGlobalLetStatements tests the compilation of global `let`
+// statements into bytecode and validates constants and instructions.
 func TestGlobalLetStatements(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -282,6 +290,7 @@ func TestGlobalLetStatements(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestStringExpressions tests the compilation of string expressions into constants and bytecode instructions.
 func TestStringExpressions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -306,6 +315,8 @@ func TestStringExpressions(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestArrayLiterals tests the compilation of array literals into bytecode,
+// including constants and generated instructions.
 func TestArrayLiterals(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -348,6 +359,7 @@ func TestArrayLiterals(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestHashLiterals tests the compilation of hash literal expressions into bytecode instructions and constants.
 func TestHashLiterals(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -392,6 +404,8 @@ func TestHashLiterals(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestIndexExpressions tests the compilation of index expressions for arrays and hashes.
+// It verifies the expected constants and bytecode instructions produced by the compiler.
 func TestIndexExpressions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -427,6 +441,7 @@ func TestIndexExpressions(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestFunctions tests the compiler's behavior for specific function-related inputs, constants, and instructions.
 func TestFunctions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -496,6 +511,8 @@ func TestFunctions(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestFunctionCalls tests the compilation of function-related code,
+// including calls, arguments, and expected bytecode output.
 func TestFunctionCalls(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -587,6 +604,7 @@ func TestFunctionCalls(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestCompilerScopes tests the behavior of the compiler when managing and transitioning between different scopes.
 func TestCompilerScopes(t *testing.T) {
 	compiler := New()
 	if compiler.scopeIndex != 0 {
@@ -642,6 +660,7 @@ func TestCompilerScopes(t *testing.T) {
 	}
 }
 
+// TestLetStatementScopes tests the behavior of let statements and variable scoping within compiled functions.
 func TestLetStatementScopes(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -715,6 +734,7 @@ func TestLetStatementScopes(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestBuiltins validates the compilation of builtin function calls and their expected constants and instructions.
 func TestBuiltins(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -754,6 +774,7 @@ func TestBuiltins(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestClosures tests the compilation of closures, ensuring proper use of constants, instructions, and nested scopes.
 func TestClosures(t *testing.T) {
 	tests := []compilerTestCase{
 		{
@@ -880,6 +901,7 @@ func TestClosures(t *testing.T) {
 	runCompilerTests(t, tests)
 }
 
+// TestRecursiveFunctions tests the compilation of recursive functions and nested closures with their corresponding instructions.
 func TestRecursiveFunctions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
