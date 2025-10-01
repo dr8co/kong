@@ -15,9 +15,48 @@ import (
 	"github.com/dr8co/kong/repl"
 )
 
-const VERSION = "0.1.0"
+const version = "0.1.0"
+
+// printUsage displays custom usage information
+func printUsage() {
+	_, _ = fmt.Fprintf(os.Stderr, `Kong Monkey Compiler v%s
+
+USAGE:
+    %s [OPTIONS]
+
+DESCRIPTION:
+    Kong compiles Monkey source code into bytecode and runs it in a virtual machine.
+    Without any flags, it starts an interactive REPL (Read-Eval-Print-Loop).
+
+OPTIONS:
+    -f, --file <path>       Execute a Monkey script file
+    -e, --eval <code>       Evaluate a Monkey expression and print the result
+    -d, --debug             Enable debug mode with more verbose output
+    -v, --version           Show version information
+    -h, --help              Show this help message
+
+EXAMPLES:
+    # Start interactive REPL
+    %s
+
+    # Execute a script file
+    %s -f script.monkey
+    %s --file script.monkey
+
+    # Evaluate an expression
+    %s -e "let x = 5; x * 2"
+    %s --eval "puts(\"Hello, World!\")"
+
+    # Execute with debug mode
+    %s -f script.monkey -d
+
+`, version, os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0])
+}
 
 func main() {
+	// Set custom usage function
+	flag.Usage = printUsage
+
 	// Define command-line flags
 	fileFlag := flag.String("file", "", "Execute a Monkey script file")
 	evalFlag := flag.String("eval", "", "Evaluate a Monkey expression and print the result")
@@ -35,7 +74,7 @@ func main() {
 
 	// Show version information if requested
 	if *versionFlag {
-		fmt.Printf("Kong Monke Compiler v%s\n", VERSION)
+		fmt.Printf("Kong Monke Compiler v%s\n", version)
 		return
 	}
 
