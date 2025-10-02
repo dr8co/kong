@@ -27,69 +27,134 @@ type Token struct {
 	Literal string
 }
 
-//nolint:revive
 const (
 	// Single-character tokens
-	ILLEGAL = "ILLEGAL"
-	EOF     = "EOF"
+
+	// Illegal represents an unknown or invalid token that the lexer does not recognize.
+	Illegal = "Illegal"
+
+	// EOF represents the end-of-file marker, signaling that no more tokens are available.
+	EOF = "EOF"
 
 	// Identifiers & literals
-	IDENT  = "IDENT"
-	INT    = "INT"
-	STRING = "STRING"
+
+	// Ident represents an identifier token, such as variable names or function names.
+	Ident = "Ident"
+
+	// Int represents an integer literal token.
+	Int = "Int"
+
+	// String represents a string literal token.
+	String = "String"
 
 	// Operators
-	ASSIGN   = "="
-	PLUS     = "+"
-	MINUS    = "-"
-	BANG     = "!"
-	ASTERISK = "*"
-	SLASH    = "/"
-	LT       = "<"
-	LTE      = "<="
-	GT       = ">"
-	GTE      = ">="
-	EQ       = "=="
-	NOT_EQ   = "!="
+
+	// Assign represents the assignment operator "=".
+	Assign = "="
+
+	// Plus represents the addition operator "+".
+	Plus = "+"
+
+	// Minus represents the subtraction operator "-".
+	Minus = "-"
+
+	// Bang represents the logical NOT operator "!".
+	Bang = "!"
+
+	// Asterisk represents the multiplication operator "*".
+	Asterisk = "*"
+
+	// Slash represents the division operator "/".
+	Slash = "/"
+
+	// Lt represents the less-than comparison operator "<".
+	Lt = "<"
+
+	// Lte represents the less-than-or-equal-to comparison operator "<=".
+	Lte = "<="
+
+	// Gt represents the greater-than comparison operator ">".
+	Gt = ">"
+
+	// Gte represents the greater-than-or-equal-to comparison operator ">=".
+	Gte = ">="
+
+	// Eq represents the equality comparison operator "==".
+	Eq = "=="
+
+	// NotEq represents the inequality comparison operator "!=".
+	NotEq = "!="
 
 	// Delimiters
-	COMMA     = ","
-	COLON     = ":"
-	SEMICOLON = ";"
-	LPAREN    = "("
-	RPAREN    = ")"
-	LBRACE    = "{"
-	RBRACE    = "}"
-	LBRACKET  = "["
-	RBRACKET  = "]"
+
+	// Comma represents the comma delimiter ",".
+	Comma = ","
+
+	// Colon represents the colon delimiter ":".
+	Colon = ":"
+
+	// Semicolon represents the semicolon delimiter ";".
+	Semicolon = ";"
+
+	// Lparen represents the left parenthesis delimiter "(".
+	Lparen = "("
+
+	// Rparen represents the right parenthesis delimiter ")".
+	Rparen = ")"
+
+	// Lbrace represents the left brace delimiter "{".
+	Lbrace = "{"
+
+	// Rbrace represents the right brace delimiter "}".
+	Rbrace = "}"
+
+	// Lbracket represents the left bracket delimiter "[".
+	Lbracket = "["
+
+	// Rbracket represents the right bracket delimiter "]".
+	Rbracket = "]"
 
 	// Keywords
-	FUNCTION = "FUNCTION"
-	LET      = "LET"
-	TRUE     = "TRUE"
-	FALSE    = "FALSE"
-	IF       = "IF"
-	ELSE     = "ELSE"
-	RETURN   = "RETURN"
+
+	// Function represents the "fn" keyword for function declarations.
+	Function = "Function"
+
+	// Let represents the "let" keyword for variable declarations.
+	Let = "Let"
+
+	// True represents the "true" boolean literal keyword.
+	True = "True"
+
+	// False represents the "false" boolean literal keyword.
+	False = "False"
+
+	// If represents the "if" keyword for conditional expressions.
+	If = "If"
+
+	// Else represents the "else" keyword for alternative branches in conditional expressions.
+	Else = "Else"
+
+	// Return represents the "return" keyword for returning values from functions.
+	Return = "Return"
 )
 
 // keywords is a map of reserved keywords to their corresponding token types.
 var keywords = map[string]Type{
-	"fn":     FUNCTION,
-	"let":    LET,
-	"true":   TRUE,
-	"false":  FALSE,
-	"if":     IF,
-	"else":   ELSE,
-	"return": RETURN,
+	"fn":     Function,
+	"let":    Let,
+	"true":   True,
+	"false":  False,
+	"if":     If,
+	"else":   Else,
+	"return": Return,
 }
 
 // LookupIdent checks if the given identifier is a keyword.
 // If it is, it returns the corresponding token type.
-// Otherwise, it returns the [IDENT] type.
+// Otherwise, it returns the [Ident] type.
 func LookupIdent(ident string) Type {
 	if tok, ok := keywords[ident]; ok {
 		return tok
 	}
-	return IDENT
+	return Ident
 }

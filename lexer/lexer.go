@@ -24,23 +24,23 @@ import (
 
 // Common tokens that are reused to reduce allocations
 var (
-	tokenPlus      = token.Token{Type: token.PLUS, Literal: "+"}
-	tokenMinus     = token.Token{Type: token.MINUS, Literal: "-"}
-	tokenSlash     = token.Token{Type: token.SLASH, Literal: "/"}
-	tokenAsterisk  = token.Token{Type: token.ASTERISK, Literal: "*"}
-	tokenLT        = token.Token{Type: token.LT, Literal: "<"}
-	tokenLTE       = token.Token{Type: token.LTE, Literal: "<="}
-	tokenGT        = token.Token{Type: token.GT, Literal: ">"}
-	tokenGTE       = token.Token{Type: token.GTE, Literal: ">="}
-	tokenSemicolon = token.Token{Type: token.SEMICOLON, Literal: ";"}
-	tokenColon     = token.Token{Type: token.COLON, Literal: ":"}
-	tokenComma     = token.Token{Type: token.COMMA, Literal: ","}
-	tokenLParen    = token.Token{Type: token.LPAREN, Literal: "("}
-	tokenRParen    = token.Token{Type: token.RPAREN, Literal: ")"}
-	tokenLBrace    = token.Token{Type: token.LBRACE, Literal: "{"}
-	tokenRBrace    = token.Token{Type: token.RBRACE, Literal: "}"}
-	tokenLBracket  = token.Token{Type: token.LBRACKET, Literal: "["}
-	tokenRBracket  = token.Token{Type: token.RBRACKET, Literal: "]"}
+	tokenPlus      = token.Token{Type: token.Plus, Literal: "+"}
+	tokenMinus     = token.Token{Type: token.Minus, Literal: "-"}
+	tokenSlash     = token.Token{Type: token.Slash, Literal: "/"}
+	tokenAsterisk  = token.Token{Type: token.Asterisk, Literal: "*"}
+	tokenLT        = token.Token{Type: token.Lt, Literal: "<"}
+	tokenLTE       = token.Token{Type: token.Lte, Literal: "<="}
+	tokenGT        = token.Token{Type: token.Gt, Literal: ">"}
+	tokenGTE       = token.Token{Type: token.Gte, Literal: ">="}
+	tokenSemicolon = token.Token{Type: token.Semicolon, Literal: ";"}
+	tokenColon     = token.Token{Type: token.Colon, Literal: ":"}
+	tokenComma     = token.Token{Type: token.Comma, Literal: ","}
+	tokenLParen    = token.Token{Type: token.Lparen, Literal: "("}
+	tokenRParen    = token.Token{Type: token.Rparen, Literal: ")"}
+	tokenLBrace    = token.Token{Type: token.Lbrace, Literal: "{"}
+	tokenRBrace    = token.Token{Type: token.Rbrace, Literal: "}"}
+	tokenLBracket  = token.Token{Type: token.Lbracket, Literal: "["}
+	tokenRBracket  = token.Token{Type: token.Rbracket, Literal: "]"}
 	tokenEOF       = token.Token{Type: token.EOF, Literal: ""}
 )
 
@@ -90,20 +90,20 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			// Use a pre-allocated token for "=="
 			l.readChar() // Advance to the next character after '=='
-			return token.Token{Type: token.EQ, Literal: string(ch) + string('=')}
+			return token.Token{Type: token.Eq, Literal: string(ch) + string('=')}
 		}
 		l.readChar() // Advance to the next character after '='
-		return token.Token{Type: token.ASSIGN, Literal: "="}
+		return token.Token{Type: token.Assign, Literal: "="}
 	case '!':
 		if l.peekChar() == '=' {
 			ch := l.ch
 			l.readChar()
 			// Use a pre-allocated token for "!="
 			l.readChar() // Advance to the next character after '!='
-			return token.Token{Type: token.NOT_EQ, Literal: string(ch) + string('=')}
+			return token.Token{Type: token.NotEq, Literal: string(ch) + string('=')}
 		}
 		l.readChar() // Advance to the next character after '!'
-		return token.Token{Type: token.BANG, Literal: "!"}
+		return token.Token{Type: token.Bang, Literal: "!"}
 	case '+':
 		l.readChar() // Advance to the next character after '+'
 		return tokenPlus
@@ -167,11 +167,11 @@ func (l *Lexer) NextToken() token.Token {
 		lit, ok := l.readString()
 		if !ok {
 			// unterminated string literal
-			l.singleCharToken.Type = token.ILLEGAL
+			l.singleCharToken.Type = token.Illegal
 			l.singleCharToken.Literal = "unterminated string"
 			return l.singleCharToken
 		}
-		tok := token.Token{Type: token.STRING, Literal: lit}
+		tok := token.Token{Type: token.String, Literal: lit}
 		l.readChar() // Advance to the next character after the closing quote
 		return tok
 	case 0:
@@ -186,12 +186,12 @@ func (l *Lexer) NextToken() token.Token {
 		}
 		if isDigit(l.ch) {
 			return token.Token{
-				Type:    token.INT,
+				Type:    token.Int,
 				Literal: l.readNumber(),
 			}
 		}
 		// For illegal characters, reuse the single char token
-		l.singleCharToken.Type = token.ILLEGAL
+		l.singleCharToken.Type = token.Illegal
 		l.singleCharToken.Literal = string(l.ch)
 		l.readChar() // Advance to the next character after the illegal character
 		return l.singleCharToken
