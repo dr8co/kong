@@ -92,9 +92,7 @@ null
 15
 
 >> let max = fn(a, b) { if (a > b) { a } else { b } };
-fn(a, b) {
-  if (a > b) { a } else { b }
-}
+Closure[0xc0000720c0]
 
 >> max(x, y)
 10
