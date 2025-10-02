@@ -456,3 +456,44 @@ func TestSpacedSlashes(t *testing.T) {
 		}
 	}
 }
+
+func TestStringEscapes(t *testing.T) {
+	input := `"hello\nworld" "tab:\tend" "quote:\"inner\"" "backslash:\\"`
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.STRING, "hello\nworld"},
+		{token.STRING, "tab:\tend"},
+		{token.STRING, "quote:\"inner\""},
+		{token.STRING, "backslash:\\"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+func TestUnterminatedString(t *testing.T) {
+	input := `"no end`
+
+	l := New(input)
+
+	tok := l.NextToken()
+	if tok.Type != token.ILLEGAL {
+		t.Fatalf("expected ILLEGAL token for unterminated string, got %q", tok.Type)
+	}
+	if tok.Literal != "unterminated string" {
+		t.Fatalf("expected literal 'unterminated string', got %q", tok.Literal)
+	}
+}
