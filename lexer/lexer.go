@@ -202,12 +202,31 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
-// skipWhitespace skips any whitespace characters in the input.
+// skipWhitespace skips any whitespace characters (and comments) in the input.
 // It's optimized to use a single loop.
 func (l *Lexer) skipWhitespace() {
-	// Fast-forward through whitespace
-	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
-		l.readChar()
+	// Fast-forward through whitespace and skip `//` line comments.
+	for {
+		// skip ordinary whitespace
+		if l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+			l.readChar()
+			continue
+		}
+
+		// skip // comments until the end of the line or EOF
+		if l.ch == '/' && l.peekChar() == '/' {
+			// consume both '/' characters
+			l.readChar()
+			l.readChar()
+			// advance until newline or EOF
+			for l.ch != '\n' && l.ch != 0 {
+				l.readChar()
+			}
+			// continue the outer loop to handle any whitespace/newline after the comment
+			continue
+		}
+
+		break
 	}
 }
 

@@ -140,3 +140,66 @@ if (5 < 10) {
 		}
 	}
 }
+
+// TestComments ensures that // style line comments are ignored by the lexer
+// whether they appear at end-of-line, on their own line, or directly after code.
+func TestComments(t *testing.T) {
+	input := `let a = 1; // comment
+// full line comment
+let b = 2; // another
+let c = 3;//no space
+let d = 4; /////// multiple slashes
+let e = "string with // not a comment";
+// comment at EOF`
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.LET, "let"},
+		{token.IDENT, "a"},
+		{token.ASSIGN, "="},
+		{token.INT, "1"},
+		{token.SEMICOLON, ";"},
+
+		{token.LET, "let"},
+		{token.IDENT, "b"},
+		{token.ASSIGN, "="},
+		{token.INT, "2"},
+		{token.SEMICOLON, ";"},
+
+		{token.LET, "let"},
+		{token.IDENT, "c"},
+		{token.ASSIGN, "="},
+		{token.INT, "3"},
+		{token.SEMICOLON, ";"},
+
+		{token.LET, "let"},
+		{token.IDENT, "d"},
+		{token.ASSIGN, "="},
+		{token.INT, "4"},
+		{token.SEMICOLON, ";"},
+
+		{token.LET, "let"},
+		{token.IDENT, "e"},
+		{token.ASSIGN, "="},
+		{token.STRING, "string with // not a comment"},
+		{token.SEMICOLON, ";"},
+
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
