@@ -178,6 +178,32 @@ func (c *Compiler) Compile(node ast.Node) error {
 			c.emit(code.OpDiv)
 		case ">":
 			c.emit(code.OpGreaterThan)
+		case ">=":
+			// a >= b  <=> !(b > a)
+			// compile Right then Left then OpGreaterThan then OpBang
+			err := c.Compile(node.Right)
+			if err != nil {
+				return err
+			}
+			err = c.Compile(node.Left)
+			if err != nil {
+				return err
+			}
+			c.emit(code.OpGreaterThan)
+			c.emit(code.OpBang)
+		case "<=":
+			// a <= b <=> !(a > b)
+			// compile Left then Right then OpGreaterThan then OpBang
+			err := c.Compile(node.Left)
+			if err != nil {
+				return err
+			}
+			err = c.Compile(node.Right)
+			if err != nil {
+				return err
+			}
+			c.emit(code.OpGreaterThan)
+			c.emit(code.OpBang)
 		case "==":
 			c.emit(code.OpEqual)
 		case "!=":

@@ -763,3 +763,16 @@ func TestRecursiveFibonacci(t *testing.T) {
 	}
 	runVmTests(t, tests)
 }
+
+// TestComparisonOperators verifies <= and >= operators via the VM (compiler+vm path).
+func TestComparisonOperators(t *testing.T) {
+	tests := []vmTestCase{
+		{"1 <= 2", true},
+		{"1 >= 2", false},
+		{"1 <= 1", true},
+		{"1 >= 1", true},
+		{"2 <= 1", false},
+		{"2 >= 1", true},
+	}
+	runVmTests(t, tests)
+}
