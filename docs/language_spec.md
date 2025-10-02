@@ -1,6 +1,6 @@
-# Monke Programming Language Specification
+# Monkey Programming Language Specification
 
-This document describes the syntax and semantics of the Monke programming language.
+This document describes the syntax and semantics of the Monkey programming language.
 
 ## 1. Introduction
 
@@ -13,7 +13,18 @@ and basic data structures like arrays and hash maps.
 
 ### 2.1 Comments
 
-Monke does not currently support comments.
+Monkey supports single-line comments using the `//` sequence.
+Any text from `//` to the end of the line is ignored by the lexer and has no effect on program execution.
+
+Block comments (`/* ... */`) are not supported at this time.
+
+Example:
+
+```monkey
+let x = 5; // this is a comment and will be ignored
+// let ignored = 10;
+puts(x); // prints 5
+```
 
 ### 2.2 Identifiers
 
@@ -38,7 +49,7 @@ fn    let    true    false    if    else    return
 The following characters and character sequences represent operators and delimiters:
 
 ```txt
-+    -    *    /    =    ==    !=    <    >    !
++    -    *    /    =    ==    !=    <    <=    >    >=    !
 (    )    {    }    [    ]    ,    ;    :
 ```
 
@@ -82,7 +93,7 @@ hash = "{" [ expression ":" expression { "," expression ":" expression } ] "}" .
 
 ## 3. Types
 
-Monke has the following built-in types:
+Monkey has the following built-in types:
 
 - Integer: 64-bit signed integer
 - Boolean: true or false
@@ -119,6 +130,28 @@ Function literals define anonymous functions.
 ```txt
 fn ( parameters ) { statements }
 ```
+
+#### 4.2.1 Closures
+
+Functions in Monkey are first-class values and support lexical scoping.
+
+A closure is a function value that captures variables from its defining environment
+and retains access to them even after the outer function returns.
+
+Simple closure example:
+
+```monkey
+let newAdder = fn(x) {
+ fn(y) { x + y }
+};
+
+let addTwo = newAdder(2);
+addTwo(3); // => 5
+```
+
+Explanation: `newAdder(2)` returns an inner function that captures the outer variable `x`
+with value `2`. Calling `addTwo(3)` invokes the inner function and computes `x + y` using the captured `x`.
+
 
 ### 4.3 Call Expressions
 
@@ -165,6 +198,8 @@ Supported infix operators:
 - `/`: Division (for integers)
 - `<`: Less than (for integers)
 - `>`: Greater than (for integers)
+- `<=`: Less than or equal to (for integers)
+- `>=`: Greater than or equal to (for integers)
 - `==`: Equal to (for all types)
 - `!=`: Not equal to (for all types)
 
@@ -212,7 +247,7 @@ Block statements group multiple statements together.
 
 ## 6. Built-in Functions
 
-Monke provides the following built-in functions:
+Monkey provides the following built-in functions:
 
 - `len(arg)`: Returns the length of a string or array
 - `first(array)`: Returns the first element of an array
@@ -223,19 +258,18 @@ Monke provides the following built-in functions:
 
 ## 7. Evaluation Rules
 
-Monke uses eager evaluation.
+Monkey uses eager evaluation.
 
-Expressions are evaluated from left to right,
-with operator precedence determining the order of operations.
+Expressions are evaluated from left to right, with operator precedence determining the order of operations.
 
 ## 8. Scoping Rules
 
-Monke uses lexical scoping.
+Monkey uses lexical scoping.
 
 Variables are visible within the block where they are defined and any nested blocks,
 unless shadowed by a variable with the same name in a nested block.
 
 ## 9. Error Handling
 
-Monke does not have explicit error handling mechanisms like try/catch.
+Monkey does not have explicit error handling mechanisms like try/catch.
 Runtime errors result in error objects that terminate execution.

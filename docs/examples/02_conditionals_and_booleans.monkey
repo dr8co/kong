@@ -32,14 +32,20 @@ puts(result); // "x is greater than y"
 let grade = 85;
 let letterGrade = if (grade >= 90) {
     "A"
-} else if (grade >= 80) {
-    "B"
-} else if (grade >= 70) {
-    "C"
-} else if (grade >= 60) {
-    "D"
 } else {
-    "F"
+    if (grade >= 80) {
+        "B"
+    } else {
+        if (grade >= 70) {
+            "C"
+        } else {
+            if (grade >= 60) {
+                "D"
+            } else {
+                "F"
+            }
+        }
+    }
 };
 
 puts("Grade:", grade);
