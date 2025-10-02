@@ -152,7 +152,6 @@ addTwo(3); // => 5
 Explanation: `newAdder(2)` returns an inner function that captures the outer variable `x`
 with value `2`. Calling `addTwo(3)` invokes the inner function and computes `x + y` using the captured `x`.
 
-
 ### 4.3 Call Expressions
 
 Call expressions invoke functions.
