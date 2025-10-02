@@ -28,18 +28,18 @@ import (
 
 //nolint:revive
 const (
-	INTEGER_OBJ           = "INTEGER"
-	BOOLEAN_OBJ           = "BOOLEAN"
-	STRING_OBJ            = "STRING"
-	NULL_OBJ              = "NULL"
-	RETURN_VALUE_OBJ      = "RETURN_VALUE"
-	ERROR_OBJ             = "ERROR"
-	FUNCTION_OBJ          = "FUNCTION"
-	BUILTIN_OBJ           = "BUILTIN"
-	ARRAY_OBJ             = "ARRAY"
-	HASH_OBJ              = "HASH"
-	COMPILED_FUNCTION_OBJ = "COMPILED_FUNCTION_OBJ"
-	CLOSURE_OBJ           = "CLOSURE"
+	IntegerObj          = "INTEGER"
+	BooleanObj          = "BOOLEAN"
+	StringObj           = "STRING"
+	NullObj             = "NULL"
+	ReturnValueObj      = "RETURN_VALUE"
+	ErrorObj            = "ERROR"
+	FunctionObj         = "FUNCTION"
+	BuiltinObj          = "BUILTIN"
+	ArrayObj            = "ARRAY"
+	HashObj             = "HASH"
+	CompiledFunctionObj = "COMPILED_FUNCTION_OBJ"
+	ClosureObj          = "CLOSURE"
 )
 
 // Type represents the type of object.
@@ -61,7 +61,7 @@ type Integer struct {
 }
 
 // Type returns the type of the object.
-func (i *Integer) Type() Type { return INTEGER_OBJ }
+func (i *Integer) Type() Type { return IntegerObj }
 
 // Inspect returns a string representation of the object.
 func (i *Integer) Inspect() string { return strconv.FormatInt(i.Value, 10) }
@@ -72,7 +72,7 @@ type Boolean struct {
 }
 
 // Type returns the type of the object.
-func (b *Boolean) Type() Type { return BOOLEAN_OBJ }
+func (b *Boolean) Type() Type { return BooleanObj }
 
 // Inspect returns a string representation of the object.
 func (b *Boolean) Inspect() string { return strconv.FormatBool(b.Value) }
@@ -85,7 +85,7 @@ type String struct {
 }
 
 // Type returns the type of the object.
-func (s *String) Type() Type { return STRING_OBJ }
+func (s *String) Type() Type { return StringObj }
 
 // Inspect returns a string representation of the object.
 func (s *String) Inspect() string { return s.Value }
@@ -94,7 +94,7 @@ func (s *String) Inspect() string { return s.Value }
 type Null struct{}
 
 // Type returns the type of the object.
-func (n *Null) Type() Type { return NULL_OBJ }
+func (n *Null) Type() Type { return NullObj }
 
 // Inspect returns a string representation of the object.
 func (n *Null) Inspect() string { return "null" }
@@ -105,7 +105,7 @@ type ReturnValue struct {
 }
 
 // Type returns the type of the object.
-func (rv *ReturnValue) Type() Type { return RETURN_VALUE_OBJ }
+func (rv *ReturnValue) Type() Type { return ReturnValueObj }
 
 // Inspect returns a string representation of the object.
 func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }
@@ -116,7 +116,7 @@ type Error struct {
 }
 
 // Type returns the type of the object.
-func (e *Error) Type() Type { return ERROR_OBJ }
+func (e *Error) Type() Type { return ErrorObj }
 
 // Inspect returns a string representation of the object.
 func (e *Error) Inspect() string { return "ERROR: " + e.Message }
@@ -131,7 +131,7 @@ type Function struct {
 }
 
 // Type returns the type of the object.
-func (f *Function) Type() Type { return FUNCTION_OBJ }
+func (f *Function) Type() Type { return FunctionObj }
 
 // Inspect returns a string representation of the object.
 func (f *Function) Inspect() string {
@@ -161,7 +161,7 @@ type Builtin struct {
 }
 
 // Type returns the type of the object.
-func (b *Builtin) Type() Type { return BUILTIN_OBJ }
+func (b *Builtin) Type() Type { return BuiltinObj }
 
 // Inspect returns a string representation of the object.
 func (b *Builtin) Inspect() string { return "builtin function" }
@@ -172,7 +172,7 @@ type Array struct {
 }
 
 // Type returns the type of the object.
-func (a *Array) Type() Type { return ARRAY_OBJ }
+func (a *Array) Type() Type { return ArrayObj }
 
 // Inspect returns a string representation of the object.
 func (a *Array) Inspect() string {
@@ -225,7 +225,7 @@ func (s *String) HashKey() HashKey {
 	h := fnv.New64a()
 	_, err := h.Write([]byte(s.Value))
 	if err != nil {
-		return HashKey{Type: ERROR_OBJ, Value: 0}
+		return HashKey{Type: ErrorObj, Value: 0}
 	}
 
 	// Create and cache the hash key
@@ -246,7 +246,7 @@ type Hash struct {
 }
 
 // Type returns the type of the object.
-func (h *Hash) Type() Type { return HASH_OBJ }
+func (h *Hash) Type() Type { return HashObj }
 
 // Inspect returns a string representation of the object.
 func (h *Hash) Inspect() string {
@@ -281,8 +281,8 @@ type CompiledFunction struct {
 	NumParameters int
 }
 
-// Type returns the object type of the compiled function, which is [COMPILED_FUNCTION_OBJ].
-func (c *CompiledFunction) Type() Type { return COMPILED_FUNCTION_OBJ }
+// Type returns the object type of the compiled function, which is [CompiledFunctionObj].
+func (c *CompiledFunction) Type() Type { return CompiledFunctionObj }
 
 // Inspect returns a formatted string representation of the CompiledFunction instance, including its memory address.
 func (c *CompiledFunction) Inspect() string { return fmt.Sprintf("CompiledFunction[%p]", c) }
@@ -296,8 +296,8 @@ type Closure struct {
 	Free []Object
 }
 
-// Type returns the type of the object, specifically [CLOSURE_OBJ] for instances of Closure.
-func (c *Closure) Type() Type { return CLOSURE_OBJ }
+// Type returns the type of the object, specifically [ClosureObj] for instances of Closure.
+func (c *Closure) Type() Type { return ClosureObj }
 
 // Inspect returns a string representation of the Closure instance, including its memory address.
 func (c *Closure) Inspect() string { return fmt.Sprintf("Closure[%p]", c) }

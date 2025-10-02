@@ -35,92 +35,92 @@ if (5 < 10) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.LET, "let"},
-		{token.IDENT, "five"},
-		{token.ASSIGN, "="},
-		{token.INT, "5"},
-		{token.SEMICOLON, ";"},
-		{token.LET, "let"},
-		{token.IDENT, "ten"},
-		{token.ASSIGN, "="},
-		{token.INT, "10"},
-		{token.SEMICOLON, ";"},
-		{token.LET, "let"},
-		{token.IDENT, "add"},
-		{token.ASSIGN, "="},
-		{token.FUNCTION, "fn"},
-		{token.LPAREN, "("},
-		{token.IDENT, "x"},
-		{token.COMMA, ","},
-		{token.IDENT, "y"},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.IDENT, "x"},
-		{token.PLUS, "+"},
-		{token.IDENT, "y"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"},
-		{token.SEMICOLON, ";"},
-		{token.LET, "let"},
-		{token.IDENT, "result"},
-		{token.ASSIGN, "="},
-		{token.IDENT, "add"},
-		{token.LPAREN, "("},
-		{token.IDENT, "five"},
-		{token.COMMA, ","},
-		{token.IDENT, "ten"},
-		{token.RPAREN, ")"},
-		{token.SEMICOLON, ";"},
-		{token.BANG, "!"},
-		{token.MINUS, "-"},
-		{token.SLASH, "/"},
-		{token.ASTERISK, "*"},
-		{token.INT, "5"},
-		{token.SEMICOLON, ";"},
-		{token.INT, "5"},
-		{token.LT, "<"},
-		{token.INT, "10"},
-		{token.GT, ">"},
-		{token.INT, "5"},
-		{token.SEMICOLON, ";"},
-		{token.IF, "if"},
-		{token.LPAREN, "("},
-		{token.INT, "5"},
-		{token.LT, "<"},
-		{token.INT, "10"},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.RETURN, "return"},
-		{token.TRUE, "true"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"},
-		{token.ELSE, "else"},
-		{token.LBRACE, "{"},
-		{token.RETURN, "return"},
-		{token.FALSE, "false"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"},
-		{token.INT, "10"},
-		{token.EQ, "=="},
-		{token.INT, "10"},
-		{token.SEMICOLON, ";"},
-		{token.INT, "10"},
-		{token.NOT_EQ, "!="},
-		{token.INT, "9"},
-		{token.SEMICOLON, ";"},
-		{token.STRING, "foobar"},
-		{token.STRING, "foo bar"},
-		{token.LBRACKET, "["},
-		{token.INT, "1"},
-		{token.COMMA, ","},
-		{token.INT, "2"},
-		{token.RBRACKET, "]"},
-		{token.SEMICOLON, ";"},
-		{token.LBRACE, "{"},
-		{token.STRING, "foo"},
-		{token.COLON, ":"},
-		{token.STRING, "bar"},
-		{token.RBRACE, "}"},
+		{token.Let, "let"},
+		{token.Ident, "five"},
+		{token.Assign, "="},
+		{token.Int, "5"},
+		{token.Semicolon, ";"},
+		{token.Let, "let"},
+		{token.Ident, "ten"},
+		{token.Assign, "="},
+		{token.Int, "10"},
+		{token.Semicolon, ";"},
+		{token.Let, "let"},
+		{token.Ident, "add"},
+		{token.Assign, "="},
+		{token.Function, "fn"},
+		{token.Lparen, "("},
+		{token.Ident, "x"},
+		{token.Comma, ","},
+		{token.Ident, "y"},
+		{token.Rparen, ")"},
+		{token.Lbrace, "{"},
+		{token.Ident, "x"},
+		{token.Plus, "+"},
+		{token.Ident, "y"},
+		{token.Semicolon, ";"},
+		{token.Rbrace, "}"},
+		{token.Semicolon, ";"},
+		{token.Let, "let"},
+		{token.Ident, "result"},
+		{token.Assign, "="},
+		{token.Ident, "add"},
+		{token.Lparen, "("},
+		{token.Ident, "five"},
+		{token.Comma, ","},
+		{token.Ident, "ten"},
+		{token.Rparen, ")"},
+		{token.Semicolon, ";"},
+		{token.Bang, "!"},
+		{token.Minus, "-"},
+		{token.Slash, "/"},
+		{token.Asterisk, "*"},
+		{token.Int, "5"},
+		{token.Semicolon, ";"},
+		{token.Int, "5"},
+		{token.Lt, "<"},
+		{token.Int, "10"},
+		{token.Gt, ">"},
+		{token.Int, "5"},
+		{token.Semicolon, ";"},
+		{token.If, "if"},
+		{token.Lparen, "("},
+		{token.Int, "5"},
+		{token.Lt, "<"},
+		{token.Int, "10"},
+		{token.Rparen, ")"},
+		{token.Lbrace, "{"},
+		{token.Return, "return"},
+		{token.True, "true"},
+		{token.Semicolon, ";"},
+		{token.Rbrace, "}"},
+		{token.Else, "else"},
+		{token.Lbrace, "{"},
+		{token.Return, "return"},
+		{token.False, "false"},
+		{token.Semicolon, ";"},
+		{token.Rbrace, "}"},
+		{token.Int, "10"},
+		{token.Eq, "=="},
+		{token.Int, "10"},
+		{token.Semicolon, ";"},
+		{token.Int, "10"},
+		{token.NotEq, "!="},
+		{token.Int, "9"},
+		{token.Semicolon, ";"},
+		{token.String, "foobar"},
+		{token.String, "foo bar"},
+		{token.Lbracket, "["},
+		{token.Int, "1"},
+		{token.Comma, ","},
+		{token.Int, "2"},
+		{token.Rbracket, "]"},
+		{token.Semicolon, ";"},
+		{token.Lbrace, "{"},
+		{token.String, "foo"},
+		{token.Colon, ":"},
+		{token.String, "bar"},
+		{token.Rbrace, "}"},
 		{token.EOF, ""},
 	}
 
@@ -156,35 +156,35 @@ let e = "string with // not a comment";
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.LET, "let"},
-		{token.IDENT, "a"},
-		{token.ASSIGN, "="},
-		{token.INT, "1"},
-		{token.SEMICOLON, ";"},
+		{token.Let, "let"},
+		{token.Ident, "a"},
+		{token.Assign, "="},
+		{token.Int, "1"},
+		{token.Semicolon, ";"},
 
-		{token.LET, "let"},
-		{token.IDENT, "b"},
-		{token.ASSIGN, "="},
-		{token.INT, "2"},
-		{token.SEMICOLON, ";"},
+		{token.Let, "let"},
+		{token.Ident, "b"},
+		{token.Assign, "="},
+		{token.Int, "2"},
+		{token.Semicolon, ";"},
 
-		{token.LET, "let"},
-		{token.IDENT, "c"},
-		{token.ASSIGN, "="},
-		{token.INT, "3"},
-		{token.SEMICOLON, ";"},
+		{token.Let, "let"},
+		{token.Ident, "c"},
+		{token.Assign, "="},
+		{token.Int, "3"},
+		{token.Semicolon, ";"},
 
-		{token.LET, "let"},
-		{token.IDENT, "d"},
-		{token.ASSIGN, "="},
-		{token.INT, "4"},
-		{token.SEMICOLON, ";"},
+		{token.Let, "let"},
+		{token.Ident, "d"},
+		{token.Assign, "="},
+		{token.Int, "4"},
+		{token.Semicolon, ";"},
 
-		{token.LET, "let"},
-		{token.IDENT, "e"},
-		{token.ASSIGN, "="},
-		{token.STRING, "string with // not a comment"},
-		{token.SEMICOLON, ";"},
+		{token.Let, "let"},
+		{token.Ident, "e"},
+		{token.Assign, "="},
+		{token.String, "string with // not a comment"},
+		{token.Semicolon, ";"},
 
 		{token.EOF, ""},
 	}
@@ -213,8 +213,8 @@ func TestCommentBetweenIdentifiers(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.IDENT, "a"},
-		{token.IDENT, "b"},
+		{token.Ident, "a"},
+		{token.Ident, "b"},
 		{token.EOF, ""},
 	}
 
@@ -237,9 +237,9 @@ func TestCommentBetweenParenthesis(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.LPAREN, "("},
-		{token.IDENT, "x"},
-		{token.RPAREN, ")"},
+		{token.Lparen, "("},
+		{token.Ident, "x"},
+		{token.Rparen, ")"},
 		{token.EOF, ""},
 	}
 
@@ -263,11 +263,11 @@ func TestCommentBetweenArrayElements(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.LBRACKET, "["},
-		{token.INT, "1"},
-		{token.COMMA, ","},
-		{token.INT, "2"},
-		{token.RBRACKET, "]"},
+		{token.Lbracket, "["},
+		{token.Int, "1"},
+		{token.Comma, ","},
+		{token.Int, "2"},
+		{token.Rbracket, "]"},
 		{token.EOF, ""},
 	}
 
@@ -291,9 +291,9 @@ func TestCommentAfterCommaNoSpace(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.IDENT, "a"},
-		{token.COMMA, ","},
-		{token.IDENT, "b"},
+		{token.Ident, "a"},
+		{token.Comma, ","},
+		{token.Ident, "b"},
 		{token.EOF, ""},
 	}
 
@@ -322,24 +322,24 @@ func TestCommentsInComplexConstructs(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.FUNCTION, "fn"},
-		{token.LPAREN, "("},
-		{token.IDENT, "a"},
-		{token.COMMA, ","},
-		{token.IDENT, "b"},
-		{token.RPAREN, ")"},
-		{token.LBRACE, "{"},
-		{token.RETURN, "return"},
-		{token.LBRACKET, "["},
-		{token.INT, "1"},
-		{token.COMMA, ","},
-		{token.INT, "2"},
-		{token.COMMA, ","},
-		{token.INT, "3"},
-		{token.RBRACKET, "]"},
-		{token.SEMICOLON, ";"},
-		{token.RBRACE, "}"},
-		{token.SEMICOLON, ";"},
+		{token.Function, "fn"},
+		{token.Lparen, "("},
+		{token.Ident, "a"},
+		{token.Comma, ","},
+		{token.Ident, "b"},
+		{token.Rparen, ")"},
+		{token.Lbrace, "{"},
+		{token.Return, "return"},
+		{token.Lbracket, "["},
+		{token.Int, "1"},
+		{token.Comma, ","},
+		{token.Int, "2"},
+		{token.Comma, ","},
+		{token.Int, "3"},
+		{token.Rbracket, "]"},
+		{token.Semicolon, ";"},
+		{token.Rbrace, "}"},
+		{token.Semicolon, ";"},
 		{token.EOF, ""},
 	}
 
@@ -366,11 +366,11 @@ func TestCommentBeforeSemicolon(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.LET, "let"},
-		{token.IDENT, "x"},
-		{token.ASSIGN, "="},
-		{token.INT, "1"},
-		{token.SEMICOLON, ";"},
+		{token.Let, "let"},
+		{token.Ident, "x"},
+		{token.Assign, "="},
+		{token.Int, "1"},
+		{token.Semicolon, ";"},
 		{token.EOF, ""},
 	}
 
@@ -396,8 +396,8 @@ func TestDivisionFollowedByComment(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.INT, "5"},
-		{token.SLASH, "/"},
+		{token.Int, "5"},
+		{token.Slash, "/"},
 		{token.EOF, ""},
 	}
 
@@ -421,7 +421,7 @@ func TestSingleSlashAtEOF(t *testing.T) {
 	l := New(input)
 
 	tok := l.NextToken()
-	if tok.Type != token.SLASH || tok.Literal != "/" {
+	if tok.Type != token.Slash || tok.Literal != "/" {
 		t.Fatalf("expected single slash token, got type=%q literal=%q", tok.Type, tok.Literal)
 	}
 
@@ -439,8 +439,8 @@ func TestSpacedSlashes(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.SLASH, "/"},
-		{token.SLASH, "/"},
+		{token.Slash, "/"},
+		{token.Slash, "/"},
 		{token.EOF, ""},
 	}
 
@@ -464,10 +464,10 @@ func TestStringEscapes(t *testing.T) {
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.STRING, "hello\nworld"},
-		{token.STRING, "tab:\tend"},
-		{token.STRING, "quote:\"inner\""},
-		{token.STRING, "backslash:\\"},
+		{token.String, "hello\nworld"},
+		{token.String, "tab:\tend"},
+		{token.String, "quote:\"inner\""},
+		{token.String, "backslash:\\"},
 		{token.EOF, ""},
 	}
 
@@ -490,8 +490,8 @@ func TestUnterminatedString(t *testing.T) {
 	l := New(input)
 
 	tok := l.NextToken()
-	if tok.Type != token.ILLEGAL {
-		t.Fatalf("expected ILLEGAL token for unterminated string, got %q", tok.Type)
+	if tok.Type != token.Illegal {
+		t.Fatalf("expected Illegal token for unterminated string, got %q", tok.Type)
 	}
 	if tok.Literal != "unterminated string" {
 		t.Fatalf("expected literal 'unterminated string', got %q", tok.Literal)
