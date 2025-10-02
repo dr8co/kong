@@ -203,3 +203,256 @@ let e = "string with // not a comment";
 		}
 	}
 }
+
+// TestCommentBetweenIdentifiers tests tokenization of input containing inline comments between identifiers.
+// Verifies token type and literal values, ensuring inline comments are correctly ignored.
+func TestCommentBetweenIdentifiers(t *testing.T) {
+	input := "a//inline comment\nb"
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.IDENT, "a"},
+		{token.IDENT, "b"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+func TestCommentBetweenParenthesis(t *testing.T) {
+	input := "(//comment\n    x)"
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.LPAREN, "("},
+		{token.IDENT, "x"},
+		{token.RPAREN, ")"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+// TestCommentBetweenArrayElements validates the lexer's ability to handle comments between array elements and return correct tokens.
+func TestCommentBetweenArrayElements(t *testing.T) {
+	input := "[1,//comment\n2]"
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.LBRACKET, "["},
+		{token.INT, "1"},
+		{token.COMMA, ","},
+		{token.INT, "2"},
+		{token.RBRACKET, "]"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+// TestCommentAfterCommaNoSpace tests the lexer for correct handling of comments immediately after a comma without a space.
+func TestCommentAfterCommaNoSpace(t *testing.T) {
+	input := "a,//c\nb"
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.IDENT, "a"},
+		{token.COMMA, ","},
+		{token.IDENT, "b"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+// TestCommentsInComplexConstructs verifies that the lexer correctly handles complex constructs interspersed with comments.
+// This includes proper tokenization of functions, arrays, and comments placed between or after constructs.
+func TestCommentsInComplexConstructs(t *testing.T) {
+	input := `fn(a, // after first arg
+    b) { return [1, // in array
+    2, 3]; // after array
+}; // after function`
+
+	// Expected token sequence ignoring comments
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.FUNCTION, "fn"},
+		{token.LPAREN, "("},
+		{token.IDENT, "a"},
+		{token.COMMA, ","},
+		{token.IDENT, "b"},
+		{token.RPAREN, ")"},
+		{token.LBRACE, "{"},
+		{token.RETURN, "return"},
+		{token.LBRACKET, "["},
+		{token.INT, "1"},
+		{token.COMMA, ","},
+		{token.INT, "2"},
+		{token.COMMA, ","},
+		{token.INT, "3"},
+		{token.RBRACKET, "]"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+		{token.SEMICOLON, ";"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+// TestCommentBeforeSemicolon tests the lexing of tokens, including handling inline comments before semicolons.
+// It validates the tokens returned by the lexer against the expected types and literals in a structured input.
+func TestCommentBeforeSemicolon(t *testing.T) {
+	input := `let x = 1 // inline comment
+;`
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.LET, "let"},
+		{token.IDENT, "x"},
+		{token.ASSIGN, "="},
+		{token.INT, "1"},
+		{token.SEMICOLON, ";"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+// TestDivisionFollowedByComment tests the lexer behavior when encountering a division operator followed by a comment.
+// Ensures proper differentiation between tokens and validates the type and literal values of each token.
+func TestDivisionFollowedByComment(t *testing.T) {
+	input := `5 / // divide then comment`
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.INT, "5"},
+		{token.SLASH, "/"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
+
+// TestSingleSlashAtEOF validates that the lexer correctly identifies a single slash token followed by an EOF token.
+func TestSingleSlashAtEOF(t *testing.T) {
+	input := `/`
+
+	l := New(input)
+
+	tok := l.NextToken()
+	if tok.Type != token.SLASH || tok.Literal != "/" {
+		t.Fatalf("expected single slash token, got type=%q literal=%q", tok.Type, tok.Literal)
+	}
+
+	tok = l.NextToken()
+	if tok.Type != token.EOF {
+		t.Fatalf("expected EOF after single slash, got %q", tok.Type)
+	}
+}
+
+// TestSpacedSlashes tests token parsing for input containing spaced slashes, ensuring correct token type and literal values.
+func TestSpacedSlashes(t *testing.T) {
+	input := `/ /`
+
+	tests := []struct {
+		expectedType    token.Type
+		expectedLiteral string
+	}{
+		{token.SLASH, "/"},
+		{token.SLASH, "/"},
+		{token.EOF, ""},
+	}
+
+	l := New(input)
+
+	for i, tt := range tests {
+		tok := l.NextToken()
+		if tok.Type != tt.expectedType {
+			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", i, tt.expectedType, tok.Type)
+		}
+		if tok.Literal != tt.expectedLiteral {
+			t.Fatalf("tests[%d] - literal wrong. expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+		}
+	}
+}
