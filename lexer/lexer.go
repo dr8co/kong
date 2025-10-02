@@ -16,7 +16,11 @@
 // and the NextToken method, which returns the next token from the input.
 package lexer
 
-import "github.com/dr8co/kong/token"
+import (
+	"strings"
+
+	"github.com/dr8co/kong/token"
+)
 
 // Common tokens that are reused to reduce allocations
 var (
@@ -144,8 +148,16 @@ func (l *Lexer) NextToken() token.Token {
 		l.readChar() // Advance to the next character after ']'
 		return tokenRBracket
 	case '"':
-		tok := token.Token{Type: token.STRING}
-		tok.Literal = l.readString()
+		// readString returns the unescaped content and a bool indicating whether the
+		// string was properly terminated (closed by a matching quote).
+		lit, ok := l.readString()
+		if !ok {
+			// unterminated string literal
+			l.singleCharToken.Type = token.ILLEGAL
+			l.singleCharToken.Literal = "unterminated string"
+			return l.singleCharToken
+		}
+		tok := token.Token{Type: token.STRING, Literal: lit}
 		l.readChar() // Advance to the next character after the closing quote
 		return tok
 	case 0:
@@ -239,16 +251,52 @@ func (l *Lexer) peekChar() byte {
 	return l.input[l.readPosition]
 }
 
-// readString reads a string from the input and returns it as a string.
-// It's optimized to avoid unnecessary allocations.
-func (l *Lexer) readString() string {
-	position := l.position + 1
-	// Fast-forward through string characters
+// readString reads a string from the input and returns the unescaped content and
+// a boolean indicating whether the string was properly terminated (closed by a quote).
+func (l *Lexer) readString() (string, bool) {
+	var b strings.Builder
+
+	// advance to the first character inside the quotes
+	l.readChar()
+
 	for {
-		l.readChar()
-		if l.ch == '"' || l.ch == 0 {
-			break
+		if l.ch == '"' {
+			// properly terminated
+			return b.String(), true
 		}
+
+		if l.ch == 0 {
+			// reached EOF without closing quote
+			return b.String(), false
+		}
+
+		if l.ch == '\\' {
+			// consume the backslash and interpret escape
+			l.readChar()
+			if l.ch == 0 {
+				// backslash at EOF — unterminated
+				return b.String(), false
+			}
+			switch l.ch {
+			case 'n':
+				b.WriteByte('\n')
+			case 't':
+				b.WriteByte('\t')
+			case 'r':
+				b.WriteByte('\r')
+			case '"':
+				b.WriteByte('"')
+			case '\\':
+				b.WriteByte('\\')
+			default:
+				// Unknown escape: preserve backslash and the char
+				b.WriteByte('\\')
+				b.WriteByte(l.ch)
+			}
+		} else {
+			b.WriteByte(l.ch)
+		}
+
+		l.readChar()
 	}
-	return l.input[position:l.position]
 }
