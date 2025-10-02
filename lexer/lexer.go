@@ -29,7 +29,9 @@ var (
 	tokenSlash     = token.Token{Type: token.SLASH, Literal: "/"}
 	tokenAsterisk  = token.Token{Type: token.ASTERISK, Literal: "*"}
 	tokenLT        = token.Token{Type: token.LT, Literal: "<"}
+	tokenLTE       = token.Token{Type: token.LTE, Literal: "<="}
 	tokenGT        = token.Token{Type: token.GT, Literal: ">"}
+	tokenGTE       = token.Token{Type: token.GTE, Literal: ">="}
 	tokenSemicolon = token.Token{Type: token.SEMICOLON, Literal: ";"}
 	tokenColon     = token.Token{Type: token.COLON, Literal: ":"}
 	tokenComma     = token.Token{Type: token.COMMA, Literal: ","}
@@ -115,9 +117,21 @@ func (l *Lexer) NextToken() token.Token {
 		l.readChar() // Advance to the next character after '*'
 		return tokenAsterisk
 	case '<':
+		if l.peekChar() == '=' {
+			l.readChar()
+			// advance past '='
+			l.readChar()
+			return tokenLTE
+		}
 		l.readChar() // Advance to the next character after '<'
 		return tokenLT
 	case '>':
+		if l.peekChar() == '=' {
+			l.readChar()
+			// advance past '='
+			l.readChar()
+			return tokenGTE
+		}
 		l.readChar() // Advance to the next character after '>'
 		return tokenGT
 	case ';':
