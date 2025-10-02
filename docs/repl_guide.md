@@ -1,7 +1,7 @@
 # Kong REPL User Guide
 
-This guide explains how to use the Monke Read-Eval-Print Loop (REPL) interface,
-which allows you to interactively write and execute Monke code.
+This guide explains how to use the Kong Read-Eval-Print Loop (REPL) interface,
+which compiles your input to bytecode and executes it on the Kong virtual machine.
 
 ## Getting Started
 
@@ -11,7 +11,7 @@ To start the Kong REPL, run the `kong` executable:
 kong
 ```
 
-You'll see a welcome message and a prompt (`>>`) where you can start entering Kong code.
+You'll see a welcome message and a prompt (`>>`) where you can start entering Monkey code.
 
 ## Basic Usage
 
@@ -53,9 +53,9 @@ Arrays and hash maps are supported:
 >> myArray[2]
 3
 
->> let myHash = {"name": "Kong", "type": "Language"};
+>> let myHash = {"name": "Monkey", "type": "Language"};
 >> myHash["name"]
-"Kong"
+"Monkey"
 ```
 
 Built-in functions include `len`, `first`, `last`, `rest`, `push`, and `puts`:
@@ -109,5 +109,5 @@ fn(a, b) {
 3
 ```
 
-For more information about the Kong language, see the
+For more information about the Monkey language, see the
 [language specification](./language_spec.md).
