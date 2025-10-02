@@ -120,8 +120,9 @@ var Builtins = []struct {
 		&Builtin{
 			Fn: func(args ...Object) Object {
 				for _, arg := range args {
-					fmt.Println(arg.Inspect())
+					fmt.Print(arg.Inspect() + " ")
 				}
+				fmt.Println()
 				return nil
 			},
 		},
