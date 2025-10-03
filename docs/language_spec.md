@@ -228,12 +228,55 @@ Let statements bind a value to an identifier.
 let identifier = expression ;
 ```
 
+Note: variables (including functions and closures) are bound using the `let` keyword.
+Functions are values in Monkey and can be assigned to variables or returned from other functions.
+
+Example:
+
+```monkey
+let add = fn(a, b) { a + b };
+let makeAdder = fn(x) { fn(y) { x + y } };
+let addTwo = makeAdder(2);
+addTwo(3); // => 5
+```
+
 ### 5.3 Return Statements
 
 Return statements return a value from a function.
 
 ```txt
 return expression ;
+```
+
+### Implicit returns
+
+Monkey supports implicit return of the last expression in a function body when there is no explicit `return` statement.
+
+The compiler treats the last evaluated expression in a function block as the function's return value.
+
+If a function body contains no expressions that produce a value (for example, an empty block), the function returns `null` implicitly.
+
+Examples:
+
+Explicit return:
+
+```monkey
+let f = fn() { return 5; };
+f(); // => 5
+```
+
+Implicit return (last expression returned):
+
+```monkey
+let g = fn() { 1 + 2 }; // last expression is returned implicitly
+g(); // => 3
+```
+
+Empty function returns null implicitly:
+
+```monkey
+let h = fn() { }; // no expression -> implicit null
+h(); // => null
 ```
 
 ### 5.4 Block Statements
