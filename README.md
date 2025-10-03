@@ -1,4 +1,18 @@
-# Kong — compiler & VM for the Monkey language
+<p align="center">
+  <img src="./assets/kong-480p.png" alt="Kong logo (Made with Google Gemini)" height="480" width="480" >
+</p>
+
+<h1 align="center">Kong</h1>
+
+<p align="center">
+  <a href="https://golang.org"><img alt="Made with Go" src="https://img.shields.io/badge/Made%20with-Go-00ADD8?logo=go"></a>
+  <img alt="Platform" src="https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20Windows-blue">
+  <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/dr8co/kong?logo=go">
+  <img alt="GitHub Actions CI test" src="https://github.com/dr8co/kong/actions/workflows/go.yml/badge.svg">
+  <img alt="License" src="https://img.shields.io/github/license/dr8co/kong?color=blue">
+</p>
+
+---
 
 Kong is a small, self-contained compiler and bytecode virtual machine
 that implements the Monkey programming language.
