@@ -4,9 +4,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
 
 	"github.com/dr8co/kong/compiler"
 	"github.com/dr8co/kong/lexer"
@@ -74,7 +76,7 @@ func main() {
 
 	// Show version information if requested
 	if *versionFlag {
-		fmt.Printf("Kong Monke Compiler v%s\n", version)
+		fmt.Printf("Kong Monkey Compiler v%s\nCheck https://github.com/dr8co/kong for updates.\n", version)
 		return
 	}
 
@@ -90,8 +92,28 @@ func main() {
 		return
 	}
 
+	// If there are positional (non-flag) arguments, treat them as code to evaluate.
+	if flag.NArg() > 0 {
+		code := strings.Join(flag.Args(), " ")
+		evaluateExpression(code)
+		return
+	}
+
+	// If stdin is piped (not a terminal), read it and evaluate its contents.
+	if fi, err := os.Stdin.Stat(); err == nil {
+		if (fi.Mode() & os.ModeCharDevice) == 0 {
+			// stdin is being piped/redirected
+			if content, err := io.ReadAll(os.Stdin); err == nil {
+				if len(content) > 0 {
+					evaluateExpression(string(content))
+					return
+				}
+			}
+		}
+	}
+
 	// Get current user
-	username := "unknown"
+	username := "anonymous"
 	if usr, err := user.Current(); err == nil {
 		username = usr.Username
 	}
