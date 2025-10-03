@@ -22,16 +22,8 @@ Type expressions or statements at the prompt. Example:
 5
 ```
 
-Multi-line input is supported. The REPL evaluates once the expression or block is complete:
-
-```console
->> if (x > 3) {
-  x + 10
-} else {
-  x - 10
-}
-15
-```
+Multi-line input is not supported at this time;
+each line should be a complete statement ending with a semicolon (`;`).
 
 You can define variables and functions, and they persist in the session:
 
