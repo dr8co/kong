@@ -74,12 +74,16 @@ func Start(in io.Reader, out io.Writer) {
 		scanned := scanner.Scan()
 		if !scanned {
 			if out == os.Stdout || out == os.Stderr {
-				_, _ = fmt.Fprintln(out, "bye!")
+				_, _ = fmt.Fprintln(out, "\rBye!👋")
 			}
 			return
 		}
 
 		line := scanner.Text()
+		if line == "" {
+			continue
+		}
+
 		l := lexer.New(line)
 		p := parser.New(l)
 
@@ -114,9 +118,11 @@ func Start(in io.Reader, out io.Writer) {
 
 		lastPopped := machine.LastPoppedStackItem()
 
-		_, err = io.WriteString(out, lastPopped.Inspect()+"\n")
-		if err != nil {
-			panic(err)
+		if lastPopped != nil {
+			_, err = io.WriteString(out, lastPopped.Inspect()+"\n")
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 }
