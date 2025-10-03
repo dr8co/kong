@@ -1,14 +1,14 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
 
-project_name: monke
+project_name: kong
 before:
   hooks:
     - go mod tidy
 
 builds:
   - #
-    id: "monke"
+    id: "kong"
 
     flags:
       - -trimpath
@@ -38,7 +38,7 @@ builds:
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
-  - id: monke
+  - id: kong
 
     formats: [ "tar.xz" ]
 
