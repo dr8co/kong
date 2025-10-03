@@ -4,7 +4,7 @@ This document describes the syntax and semantics of the Monkey programming langu
 
 ## 1. Introduction
 
-Monke is a simple, interpreted programming language with a C-like syntax.
+Monkey is a simple, interpreted programming language with a C-like syntax.
 
 It is dynamically typed and supports first-class functions, closures,
 and basic data structures like arrays and hash maps.

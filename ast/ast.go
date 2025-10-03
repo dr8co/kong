@@ -1,6 +1,6 @@
-// Package ast defines the Abstract Syntax Tree (AST) for the Monke programming language.
+// Package ast defines the Abstract Syntax Tree (AST) for the Monkey programming language.
 //
-// The AST represents the structure of a Monke program after it has been parsed.
+// The AST represents the structure of a Monkey program after it has been parsed.
 // It consists of nodes that represent different language constructs such as expressions,
 // statements, and literals. The AST is used by the evaluator to execute the program.
 //
@@ -47,7 +47,7 @@ type Expression interface {
 }
 
 // Program is the root node of the AST.
-// It represents a complete Monke program and contains a list of statements.
+// It represents a complete Monkey program and contains a list of statements.
 type Program struct {
 	// The list of statements in the program.
 	Statements []Statement

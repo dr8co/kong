@@ -1,4 +1,4 @@
-// Package token defines the token types and structures for the Monke programming language.
+// Package token defines the token types and structures for the Monkey programming language.
 //
 // Tokens are the smallest units of meaning in the language, produced by the lexer
 // during the lexical analysis phase.

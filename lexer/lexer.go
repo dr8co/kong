@@ -1,4 +1,4 @@
-// Package lexer implements the lexical analyzer for the Monke programming language.
+// Package lexer implements the lexical analyzer for the Monkey programming language.
 //
 // The lexer is responsible for breaking down the source code into tokens,
 // which are the smallest units of meaning in the language.
@@ -44,7 +44,7 @@ var (
 	tokenEOF       = token.Token{Type: token.EOF, Literal: ""}
 )
 
-// Lexer represents the lexer for the Monke programming language.
+// Lexer represents the lexer for the Monkey programming language.
 type Lexer struct {
 	input        string
 	position     int

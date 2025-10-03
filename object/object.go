@@ -1,7 +1,7 @@
-// Package object defines the object system for the Monke programming language.
+// Package object defines the object system for the Monkey programming language.
 //
 // This package implements the runtime object system that represents values
-// during the execution of a Monke program.
+// during the execution of a Monkey program.
 // It defines various types of objects such as integers, booleans, strings,
 // arrays, hashes, functions, and built-ins.
 //
@@ -45,8 +45,8 @@ const (
 // Type represents the type of object.
 type Type string
 
-// Object is the interface that wraps the basic operations of all Monke objects.
-// All Monke objects implement this interface.
+// Object is the interface that wraps the basic operations of all Monkey objects.
+// All Monkey objects implement this interface.
 type Object interface {
 	// Type returns the type of the object as a value of Type.
 	Type() Type
@@ -55,7 +55,7 @@ type Object interface {
 	Inspect() string
 }
 
-// Integer represents a Monke integer value.
+// Integer represents a Monkey integer value.
 type Integer struct {
 	Value int64
 }
@@ -66,7 +66,7 @@ func (i *Integer) Type() Type { return IntegerObj }
 // Inspect returns a string representation of the object.
 func (i *Integer) Inspect() string { return strconv.FormatInt(i.Value, 10) }
 
-// Boolean represents a Monke boolean value.
+// Boolean represents a Monkey boolean value.
 type Boolean struct {
 	Value bool
 }
@@ -77,7 +77,7 @@ func (b *Boolean) Type() Type { return BooleanObj }
 // Inspect returns a string representation of the object.
 func (b *Boolean) Inspect() string { return strconv.FormatBool(b.Value) }
 
-// String represents a Monke string value.
+// String represents a Monkey string value.
 type String struct {
 	Value string
 	// Cache for the hash key to avoid recalculating it
@@ -90,7 +90,7 @@ func (s *String) Type() Type { return StringObj }
 // Inspect returns a string representation of the object.
 func (s *String) Inspect() string { return s.Value }
 
-// Null represents a Monke null value.
+// Null represents a Monkey null value.
 type Null struct{}
 
 // Type returns the type of the object.
@@ -99,7 +99,7 @@ func (n *Null) Type() Type { return NullObj }
 // Inspect returns a string representation of the object.
 func (n *Null) Inspect() string { return "null" }
 
-// ReturnValue represents a Monke return value.
+// ReturnValue represents a Monkey return value.
 type ReturnValue struct {
 	Value Object
 }
@@ -110,7 +110,7 @@ func (rv *ReturnValue) Type() Type { return ReturnValueObj }
 // Inspect returns a string representation of the object.
 func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }
 
-// Error represents a Monke error.
+// Error represents a Monkey error.
 type Error struct {
 	Message string
 }
@@ -121,7 +121,7 @@ func (e *Error) Type() Type { return ErrorObj }
 // Inspect returns a string representation of the object.
 func (e *Error) Inspect() string { return "ERROR: " + e.Message }
 
-// Function represents a Monke function.
+// Function represents a Monkey function.
 type Function struct {
 	Parameters []*ast.Identifier
 	Body       *ast.BlockStatement
@@ -152,10 +152,10 @@ func (f *Function) Inspect() string {
 	return out.String()
 }
 
-// BuiltinFunction represents a Monke builtin function.
+// BuiltinFunction represents a Monkey builtin function.
 type BuiltinFunction func(args ...Object) Object
 
-// Builtin represents a Monke builtin.
+// Builtin represents a Monkey builtin.
 type Builtin struct {
 	Fn BuiltinFunction
 }
@@ -166,7 +166,7 @@ func (b *Builtin) Type() Type { return BuiltinObj }
 // Inspect returns a string representation of the object.
 func (b *Builtin) Inspect() string { return "builtin function" }
 
-// Array represents a Monke array.
+// Array represents a Monkey array.
 type Array struct {
 	Elements []Object
 }
@@ -240,7 +240,7 @@ type HashPair struct {
 	Value Object
 }
 
-// Hash represents a Monke hash.
+// Hash represents a Monkey hash.
 type Hash struct {
 	Pairs map[HashKey]HashPair
 }

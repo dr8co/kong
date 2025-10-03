@@ -1,4 +1,4 @@
-// Package parser implements the syntactic analyzer for the Monke programming language.
+// Package parser implements the syntactic analyzer for the Monkey programming language.
 //
 // The parser takes a stream of tokens from the lexer and constructs an Abstract
 // Syntax Tree (AST) that represents the structure of the program.
@@ -11,7 +11,7 @@
 //   - Support for all language constructs (statements, expressions, literals, etc.)
 //
 // The main entry point is the [New] function, which creates a new [Parser] instance,
-// and the [Parser.ParseProgram] method, which parses a complete Monke program and returns
+// and the [Parser.ParseProgram] method, which parses a complete Monkey program and returns
 // an AST.
 package parser
 
@@ -73,7 +73,7 @@ type (
 	infixParseFn  func(ast.Expression) ast.Expression
 )
 
-// Parser represents a Monke parser.
+// Parser represents a Monkey parser.
 type Parser struct {
 	l      *lexer.Lexer
 	errors []string
@@ -175,7 +175,7 @@ func (p *Parser) nextToken() {
 	p.peekToken = p.l.NextToken()
 }
 
-// ParseProgram parses a complete Monke program and returns its AST representation.
+// ParseProgram parses a complete Monkey program and returns its AST representation.
 // It processes tokens until it reaches the end of the input, building a list of statements.
 //
 // Check [Parser.Errors] after calling this method to see if any parsing errors occurred.
