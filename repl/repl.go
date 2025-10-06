@@ -52,8 +52,8 @@ import (
 	"github.com/dr8co/kong/vm"
 )
 
-// PROMPT is the string used to prompt the user for input.
-const PROMPT = ">> "
+// Prompt is the string used to prompt the user for input.
+const Prompt = ">> "
 
 // Start starts the REPL and runs the interactive loop.
 func Start(in io.Reader, out io.Writer) {
@@ -67,7 +67,7 @@ func Start(in io.Reader, out io.Writer) {
 	}
 
 	for {
-		_, err := fmt.Fprint(out, PROMPT)
+		_, err := fmt.Fprint(out, Prompt)
 		if err != nil {
 			panic(err)
 		}

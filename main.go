@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/dr8co/kong/compiler"
@@ -118,8 +119,13 @@ func main() {
 		username = usr.Username
 	}
 
-	fmt.Println("Hello", username+",", "welcome to kong compiler!")
-	fmt.Println("Feel free to type in Monkey code. (Ctrl+D or Ctrl+C to exit)")
+	eof := "Ctrl+D"
+	if runtime.GOOS == "windows" {
+		eof = "Ctrl+Z + Enter"
+	}
+
+	fmt.Println("Hello", username+",", "welcome to the Kong compiler!")
+	fmt.Printf("Feel free to type in Monkey code. (%s or Ctrl+C to exit)\n", eof)
 
 	// Start the REPL
 	repl.Start(os.Stdin, os.Stdout)
