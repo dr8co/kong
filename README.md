@@ -138,7 +138,7 @@ For more details and examples, check the [documentation](./docs/README.md).
 ## Contributing
 
 Contributions are welcome! Please open issues or submit pull requests for improvements or bug fixes.
-See [CONTRIBUTIONS.md](./CONTRIBUTIONS.md) for guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ## License
 
