@@ -53,7 +53,7 @@ EXAMPLES:
     # Execute with debug mode
     %s -f script.monkey -d
 
-`, version, os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0])
+`, version, os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0], os.Args[0]) // #nosec G705 - false positive.
 }
 
 func main() {
@@ -223,6 +223,6 @@ func evaluateExpression(expr string) {
 func printParserErrors(errors []string) {
 	_, _ = fmt.Fprintln(os.Stderr, "Parser errors:")
 	for _, msg := range errors {
-		_, _ = fmt.Fprintln(os.Stderr, "\t"+msg)
+		_, _ = fmt.Fprintln(os.Stderr, "\t"+msg) // #nosec G705 - false positive.
 	}
 }

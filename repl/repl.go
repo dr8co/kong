@@ -135,7 +135,7 @@ func printParseErrors(out io.Writer, errors []string) {
 	}
 
 	for _, msg := range errors {
-		_, err = io.WriteString(out, "\t"+msg+"\n")
+		_, err = io.WriteString(out, "\t"+msg+"\n") // #nosec G705 - false positive.
 		if err != nil {
 			panic(err)
 		}
