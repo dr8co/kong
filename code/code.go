@@ -257,6 +257,7 @@ func Make(op Opcode, operands ...int) []byte {
 		width := def.OperandWidths[i]
 		switch width {
 		case 1:
+			//nolint:gosec
 			instruction[offset] = byte(operand)
 		case 2:
 			// //nolint:gosec
