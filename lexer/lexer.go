@@ -269,6 +269,7 @@ func (l *Lexer) peekChar() byte {
 // a boolean indicating whether the string was properly terminated (closed by a quote).
 func (l *Lexer) readString() (string, bool) {
 	var b strings.Builder
+	b.Grow(1024) // Preallocate for efficiency
 
 	// advance to the first character inside the quotes
 	l.readChar()

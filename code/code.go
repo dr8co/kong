@@ -271,6 +271,7 @@ func Make(op Opcode, operands ...int) []byte {
 // String provides a human-readable string representation of the [Instructions], formatted with opcodes and operands.
 func (ins Instructions) String() string {
 	var out strings.Builder
+	out.Grow(1024) // Preallocate for efficiency
 
 	i := 0
 	for i < len(ins) {

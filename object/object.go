@@ -135,12 +135,14 @@ func (f *Function) Type() Type { return FunctionObj }
 
 // Inspect returns a string representation of the object.
 func (f *Function) Inspect() string {
-	var out strings.Builder
 	params := make([]string, 0, len(f.Parameters))
 
 	for _, p := range f.Parameters {
 		params = append(params, p.String())
 	}
+
+	var out strings.Builder
+	out.Grow(1024) // Preallocate for efficiency
 
 	out.WriteString("fn")
 	out.WriteString("(")
@@ -176,12 +178,13 @@ func (a *Array) Type() Type { return ArrayObj }
 
 // Inspect returns a string representation of the object.
 func (a *Array) Inspect() string {
-	var out strings.Builder
-
 	elements := make([]string, len(a.Elements))
 	for i, e := range a.Elements {
 		elements[i] = e.Inspect()
 	}
+
+	var out strings.Builder
+	out.Grow(len(elements)*16 + 8) // Preallocate for efficiency
 
 	out.WriteString("[")
 	out.WriteString(strings.Join(elements, ", "))
@@ -250,12 +253,13 @@ func (h *Hash) Type() Type { return HashObj }
 
 // Inspect returns a string representation of the object.
 func (h *Hash) Inspect() string {
-	var out strings.Builder
-
 	pairs := make([]string, 0, len(h.Pairs))
 	for _, pair := range h.Pairs {
 		pairs = append(pairs, fmt.Sprintf("%s: %s", pair.Key.Inspect(), pair.Value.Inspect()))
 	}
+
+	var out strings.Builder
+	out.Grow(len(pairs)*32 + 4) // Preallocate for efficiency
 
 	out.WriteString("{")
 	out.WriteString(strings.Join(pairs, ", "))
