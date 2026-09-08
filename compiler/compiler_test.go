@@ -15,7 +15,7 @@ import (
 // expected constants, and instructions.
 type compilerTestCase struct {
 	input                string
-	expectedConstants    []interface{}
+	expectedConstants    []any
 	expectedInstructions []code.Instructions
 }
 
@@ -31,7 +31,7 @@ func TestIntegerArithmetic(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input:             "1 + 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -41,7 +41,7 @@ func TestIntegerArithmetic(t *testing.T) {
 		},
 		{
 			input:             "1; 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpPop),
@@ -51,7 +51,7 @@ func TestIntegerArithmetic(t *testing.T) {
 		},
 		{
 			input:             "1 - 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -61,7 +61,7 @@ func TestIntegerArithmetic(t *testing.T) {
 		},
 		{
 			input:             "1 * 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -71,7 +71,7 @@ func TestIntegerArithmetic(t *testing.T) {
 		},
 		{
 			input:             "2 / 1",
-			expectedConstants: []interface{}{2, 1},
+			expectedConstants: []any{2, 1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -81,7 +81,7 @@ func TestIntegerArithmetic(t *testing.T) {
 		},
 		{
 			input:             "-1",
-			expectedConstants: []interface{}{1},
+			expectedConstants: []any{1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpMinus),
@@ -97,7 +97,7 @@ func TestBooleanExpressions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input:             "true",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpTrue),
 				code.Make(code.OpPop),
@@ -105,7 +105,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "false",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpFalse),
 				code.Make(code.OpPop),
@@ -113,7 +113,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "1 > 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -123,7 +123,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "1 < 2",
-			expectedConstants: []interface{}{2, 1},
+			expectedConstants: []any{2, 1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -133,7 +133,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "1 == 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -144,7 +144,7 @@ func TestBooleanExpressions(t *testing.T) {
 		{
 
 			input:             "1 != 2",
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -154,7 +154,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "true == false",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpTrue),
 				code.Make(code.OpFalse),
@@ -164,7 +164,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "true != false",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpTrue),
 				code.Make(code.OpFalse),
@@ -174,7 +174,7 @@ func TestBooleanExpressions(t *testing.T) {
 		},
 		{
 			input:             "!true",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpTrue),
 				code.Make(code.OpBang),
@@ -192,7 +192,7 @@ func TestConditionals(t *testing.T) {
 			input: `
 if (true) { 10 }; 3333;
 `,
-			expectedConstants: []interface{}{10, 3333},
+			expectedConstants: []any{10, 3333},
 			expectedInstructions: []code.Instructions{
 				// 0000
 				code.Make(code.OpTrue),
@@ -216,7 +216,7 @@ if (true) { 10 }; 3333;
 			input: `
 if (true) { 10 } else { 20 }; 3333;
 `,
-			expectedConstants: []interface{}{10, 20, 3333},
+			expectedConstants: []any{10, 20, 3333},
 			expectedInstructions: []code.Instructions{
 				// 0000
 				code.Make(code.OpTrue),
@@ -249,7 +249,7 @@ func TestGlobalLetStatements(t *testing.T) {
             let one = 1;
             let two = 2;
             `,
-			expectedConstants: []interface{}{1, 2},
+			expectedConstants: []any{1, 2},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpSetGlobal, 0),
@@ -262,7 +262,7 @@ func TestGlobalLetStatements(t *testing.T) {
             let one = 1;
             one;
             `,
-			expectedConstants: []interface{}{1},
+			expectedConstants: []any{1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpSetGlobal, 0),
@@ -276,7 +276,7 @@ func TestGlobalLetStatements(t *testing.T) {
             let two = one;
             two;
             `,
-			expectedConstants: []interface{}{1},
+			expectedConstants: []any{1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpSetGlobal, 0),
@@ -295,7 +295,7 @@ func TestStringExpressions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input:             `"monkey"`,
-			expectedConstants: []interface{}{"monkey"},
+			expectedConstants: []any{"monkey"},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpPop),
@@ -303,7 +303,7 @@ func TestStringExpressions(t *testing.T) {
 		},
 		{
 			input:             `"mon" + "key"`,
-			expectedConstants: []interface{}{"mon", "key"},
+			expectedConstants: []any{"mon", "key"},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -321,7 +321,7 @@ func TestArrayLiterals(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input:             "[]",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpArray, 0),
 				code.Make(code.OpPop),
@@ -329,7 +329,7 @@ func TestArrayLiterals(t *testing.T) {
 		},
 		{
 			input:             "[1, 2, 3]",
-			expectedConstants: []interface{}{1, 2, 3},
+			expectedConstants: []any{1, 2, 3},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -340,7 +340,7 @@ func TestArrayLiterals(t *testing.T) {
 		},
 		{
 			input:             "[1 + 2, 3 - 4, 5 * 6]",
-			expectedConstants: []interface{}{1, 2, 3, 4, 5, 6},
+			expectedConstants: []any{1, 2, 3, 4, 5, 6},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -364,7 +364,7 @@ func TestHashLiterals(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input:             "{}",
-			expectedConstants: []interface{}{},
+			expectedConstants: []any{},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpHash, 0),
 				code.Make(code.OpPop),
@@ -372,7 +372,7 @@ func TestHashLiterals(t *testing.T) {
 		},
 		{
 			input:             "{1: 2, 3: 4, 5: 6}",
-			expectedConstants: []interface{}{1, 2, 3, 4, 5, 6},
+			expectedConstants: []any{1, 2, 3, 4, 5, 6},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -386,7 +386,7 @@ func TestHashLiterals(t *testing.T) {
 		},
 		{
 			input:             "{1: 2 + 3, 4: 5 * 6}",
-			expectedConstants: []interface{}{1, 2, 3, 4, 5, 6},
+			expectedConstants: []any{1, 2, 3, 4, 5, 6},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -410,7 +410,7 @@ func TestIndexExpressions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input:             "[1, 2, 3][1 + 1]",
-			expectedConstants: []interface{}{1, 2, 3, 1, 1},
+			expectedConstants: []any{1, 2, 3, 1, 1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -425,7 +425,7 @@ func TestIndexExpressions(t *testing.T) {
 		},
 		{
 			input:             "{1: 2}[2 - 1]",
-			expectedConstants: []interface{}{1, 2, 2, 1},
+			expectedConstants: []any{1, 2, 2, 1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
 				code.Make(code.OpConstant, 1),
@@ -446,7 +446,7 @@ func TestFunctions(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input: `fn() { return 5 + 10 }`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				5,
 				10,
 				[]code.Instructions{
@@ -463,7 +463,7 @@ func TestFunctions(t *testing.T) {
 		},
 		{
 			input: `fn() { 5 + 10 }`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				5,
 				10,
 				[]code.Instructions{
@@ -480,7 +480,7 @@ func TestFunctions(t *testing.T) {
 		},
 		{
 			input: `fn() { 1; 2 }`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				1,
 				2,
 				[]code.Instructions{
@@ -497,7 +497,7 @@ func TestFunctions(t *testing.T) {
 		},
 		{
 			input: `fn() { }`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				[]code.Instructions{
 					code.Make(code.OpReturn),
 				},
@@ -517,7 +517,7 @@ func TestFunctionCalls(t *testing.T) {
 	tests := []compilerTestCase{
 		{
 			input: `fn() { 24 }();`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				24,
 				[]code.Instructions{
 					code.Make(code.OpConstant, 0), // The literal "24"
@@ -535,7 +535,7 @@ func TestFunctionCalls(t *testing.T) {
             let noArg = fn() { 24 };
             noArg();
             `,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				24,
 				[]code.Instructions{
 					code.Make(code.OpConstant, 0), // The literal "24"
@@ -555,7 +555,7 @@ func TestFunctionCalls(t *testing.T) {
             let oneArg = fn(a) { a };
             oneArg(24);
             `,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				[]code.Instructions{
 					code.Make(code.OpGetLocal, 0),
 					code.Make(code.OpReturnValue),
@@ -576,7 +576,7 @@ func TestFunctionCalls(t *testing.T) {
             let manyArg = fn(a, b, c) { a; b; c };
             manyArg(24, 25, 26);
             `,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				[]code.Instructions{
 					code.Make(code.OpGetLocal, 0),
 					code.Make(code.OpPop),
@@ -668,7 +668,7 @@ func TestLetStatementScopes(t *testing.T) {
 			let num = 55;
 			fn() { num }
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				55,
 				[]code.Instructions{
 					code.Make(code.OpGetGlobal, 0),
@@ -689,7 +689,7 @@ func TestLetStatementScopes(t *testing.T) {
 			    num
 			}
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				55,
 				[]code.Instructions{
 					code.Make(code.OpConstant, 0),
@@ -711,7 +711,7 @@ func TestLetStatementScopes(t *testing.T) {
 			    a + b
 			}
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				55,
 				77,
 				[]code.Instructions{
@@ -742,7 +742,7 @@ func TestBuiltins(t *testing.T) {
 			len([]);
 			push([], 1);
 			`,
-			expectedConstants: []interface{}{1},
+			expectedConstants: []any{1},
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpGetBuiltin, 0),
 				code.Make(code.OpArray, 0),
@@ -757,7 +757,7 @@ func TestBuiltins(t *testing.T) {
 		},
 		{
 			input: `fn() { len([]) }`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				[]code.Instructions{
 					code.Make(code.OpGetBuiltin, 0),
 					code.Make(code.OpArray, 0),
@@ -785,7 +785,7 @@ func TestClosures(t *testing.T) {
 				}
 			}
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				[]code.Instructions{
 					code.Make(code.OpGetFree, 0),
 					code.Make(code.OpGetLocal, 0),
@@ -813,7 +813,7 @@ func TestClosures(t *testing.T) {
 				}
 			};
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				[]code.Instructions{
 					code.Make(code.OpGetFree, 0),
 					code.Make(code.OpGetFree, 1),
@@ -857,7 +857,7 @@ func TestClosures(t *testing.T) {
 				}
 			}
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				55,
 				66,
 				77,
@@ -909,7 +909,7 @@ func TestRecursiveFunctions(t *testing.T) {
 			let countDown = fn(x) { countDown(x - 1); };
 			countDown(1);
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				1,
 				[]code.Instructions{
 					code.Make(code.OpCurrentClosure),
@@ -938,7 +938,7 @@ func TestRecursiveFunctions(t *testing.T) {
 			};
 			wrapper();
 			`,
-			expectedConstants: []interface{}{
+			expectedConstants: []any{
 				1,
 				[]code.Instructions{
 					code.Make(code.OpCurrentClosure),
@@ -1020,7 +1020,7 @@ func concatInstructions(s []code.Instructions) code.Instructions {
 	return out
 }
 
-func testConstants(expected []interface{}, actual []object.Object) error {
+func testConstants(expected []any, actual []object.Object) error {
 	if len(expected) != len(actual) {
 		return fmt.Errorf("wrong number of constants. got=%d, want=%d", len(actual), len(expected))
 	}

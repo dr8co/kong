@@ -31,7 +31,7 @@ func testIntegerObject(expected int64, actual object.Object) error {
 // vmTestCase represents a single test case for the virtual machine, including input code and the expected output.
 type vmTestCase struct {
 	input    string
-	expected interface{}
+	expected any
 }
 
 func runVmTests(t *testing.T, tests []vmTestCase) {
@@ -57,7 +57,7 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 	}
 }
 
-func testExpectedObject(t *testing.T, expected interface{}, actual object.Object) {
+func testExpectedObject(t *testing.T, expected any, actual object.Object) {
 	t.Helper()
 
 	switch expected := expected.(type) {
