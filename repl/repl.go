@@ -73,6 +73,9 @@ func Start(in io.Reader, out io.Writer) {
 		}
 		scanned := scanner.Scan()
 		if !scanned {
+			if err := scanner.Err(); err != nil {
+				panic(err)
+			}
 			if out == os.Stdout || out == os.Stderr {
 				_, _ = fmt.Fprintln(out, "\rBye!👋")
 			}
