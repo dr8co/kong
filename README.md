@@ -40,7 +40,7 @@ It is a faster, more efficient, and more robust
 
 ### Prerequisites
 
-- Go 1.25 or newer
+- Go 1.27 or newer
 
 ### Installation
 
